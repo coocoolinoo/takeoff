@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { TabsPage } from './tabs.page';
+import { FooterPage } from './footer.page';
 
 export const routes: Routes = [
   {
     path: 'tabs',
-    component: TabsPage,
+    component: FooterPage,
     children: [
       {
         path: 'Startseite',
@@ -23,14 +23,14 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/Startseite',
+        redirectTo: '/footer/Startseite',
         pathMatch: 'full',
       },
     ],
   },
   {
     path: '',
-    redirectTo: '/tabs/Startseite',
+    redirectTo: '/footer/Startseite',
     pathMatch: 'full',
   },
 ];

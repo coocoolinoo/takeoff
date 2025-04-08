@@ -4,12 +4,12 @@ import { addIcons } from 'ionicons';
 import { triangle, ellipse, square } from 'ionicons/icons';
 
 @Component({
-  selector: 'app-tabs',
-  templateUrl: 'tabs.page.html',
-  styleUrls: ['tabs.page.scss'],
+  selector: 'app-footer',
+  templateUrl: 'footer.page.html',
+  styleUrls: ['footer.page.scss'],
   imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel],
 })
-export class TabsPage {
+export class FooterPage {
   public environmentInjector = inject(EnvironmentInjector);
 
   constructor() {
