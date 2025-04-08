@@ -1,0 +1,7 @@
+{
+  "name": "takeoff",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
