@@ -1,13 +1,113 @@
 import { Component } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/standalone';
-import { ExploreContainerComponent } from '../explore-container/explore-container.component';
+import { AerodataboxService } from '../aerodatabox.service';
+import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-startseite',
-  templateUrl: 'startseite.page.html',
-  styleUrls: ['startseite.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, ExploreContainerComponent],
+  templateUrl: './startseite.page.html',
+  styleUrls: ['./startseite.page.scss'],
+  standalone: true,
+  imports: [IonicModule, FormsModule, CommonModule]
 })
 export class StartseitePage {
-  constructor() {}
+  departureSearchQuery: string = '';
+  arrivalSearchQuery: string = '';
+  departureAirports: any[] = [];
+  arrivalAirports: any[] = [];
+  selectedDeparture: { name: string, iata: string } | null = null;
+  selectedArrival: { name: string, iata: string } | null = null;
+  isLoading: boolean = false;
+  errorMessage: string = '';
+
+  constructor(private airportService: AerodataboxService) {}
+
+  searchDepartureAirports(term: string): void {
+    if (term.trim() && !this.selectedDeparture) {
+      this.isLoading = true;
+      this.airportService.searchAirports(term).subscribe({
+        next: (airports) => {
+          this.departureAirports = airports.items || [];
+          this.isLoading = false;
+        },
+        error: (error) => {
+          this.errorMessage = 'Fehler beim Laden der Flughäfen';
+          this.isLoading = false;
+        }
+      });
+    } else {
+      this.departureAirports = [];
+    }
+  }
+
+  searchArrivalAirports(term: string): void {
+    if (term.trim() && !this.selectedArrival) {
+      this.isLoading = true;
+      this.airportService.searchAirports(term).subscribe({
+        next: (airports) => {
+          this.arrivalAirports = airports.items || [];
+          this.isLoading = false;
+        },
+        error: (error) => {
+          this.errorMessage = 'Fehler beim Laden der Flughäfen';
+          this.isLoading = false;
+        }
+      });
+    } else {
+      this.arrivalAirports = [];
+    }
+  }
+
+  selectDepartureAirport(airport: any): void {
+    this.selectedDeparture = airport;
+    this.departureSearchQuery = `${airport.name} (${airport.iata})`;
+    this.departureAirports = [];
+  }
+
+  selectArrivalAirport(airport: any): void {
+    this.selectedArrival = airport;
+    this.arrivalSearchQuery = `${airport.name} (${airport.iata})`;
+    this.arrivalAirports = [];
+  }
+
+  swapAirports(): void {
+    const temp = this.selectedDeparture;
+    this.selectedDeparture = this.selectedArrival;
+    this.selectedArrival = temp;
+
+    // Update search queries
+    if (this.selectedDeparture) {
+      this.departureSearchQuery = `${this.selectedDeparture.name} (${this.selectedDeparture.iata})`;
+    }
+    if (this.selectedArrival) {
+      this.arrivalSearchQuery = `${this.selectedArrival.name} (${this.selectedArrival.iata})`;
+    }
+  }
+
+  clearDeparture(): void {
+    this.selectedDeparture = null;
+    this.departureSearchQuery = '';
+  }
+
+  clearArrival(): void {
+    this.selectedArrival = null;
+    this.arrivalSearchQuery = '';
+  }
+
+  clearDepartureAirportsDelayed(): void {
+    setTimeout(() => {
+      if (!this.selectedDeparture) {
+        this.departureAirports = [];
+      }
+    }, 300);
+  }
+
+  clearArrivalAirportsDelayed(): void {
+    setTimeout(() => {
+      if (!this.selectedArrival) {
+        this.arrivalAirports = [];
+      }
+    }, 300);
+  }
 }

@@ -1,17 +1,67 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-
-    </ion-title>
+    <ion-title>Flugsuche</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="startseite-content">
+  <div class="flight-card">
+    <!-- Abflughafen Section -->
+    <ion-item>
+      <ion-label position="floating">Abflughafen</ion-label>
+      <ion-input
+        [(ngModel)]="departureSearchQuery"
+        (ionInput)="searchDepartureAirports(departureSearchQuery || '')"
+        (ionBlur)="clearDepartureAirportsDelayed()"
+        placeholder="Flughafen suchen"
+      ></ion-input>
+      <ion-icon *ngIf="selectedDeparture" name="close" slot="end" (click)="clearDeparture()"></ion-icon>
+    </ion-item>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+    <ion-list *ngIf="departureAirports.length > 0" class="autocomplete-list">
+      <ion-item *ngFor="let airport of departureAirports" (click)="selectDepartureAirport(airport)">
+        <ion-label>{{ airport.name }} ({{ airport.iata }})</ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-item *ngIf="selectedDeparture">
+      <ion-label>Abflughafen: {{ selectedDeparture.name }} ({{ selectedDeparture.iata }})</ion-label>
+      <ion-icon name="close" slot="end" (click)="clearDeparture()"></ion-icon>
+    </ion-item>
+
+    <!-- Swap Button -->
+    <div class="swap-button">
+      <ion-button (click)="swapAirports()" fill="clear">
+        <ion-icon name="swap-vertical"></ion-icon>
+      </ion-button>
+    </div>
+
+    <!-- Ziel-Flughafen Section -->
+    <ion-item>
+      <ion-label position="floating">Ziel-Flughafen</ion-label>
+      <ion-input
+        [(ngModel)]="arrivalSearchQuery"
+        (ionInput)="searchArrivalAirports(arrivalSearchQuery || '')"
+        (ionBlur)="clearArrivalAirportsDelayed()"
+        placeholder="Ziel-Flughafen suchen"
+      ></ion-input>
+      <ion-icon *ngIf="selectedArrival" name="close" slot="end" (click)="clearArrival()"></ion-icon>
+    </ion-item>
+
+    <ion-list *ngIf="arrivalAirports.length > 0" class="autocomplete-list">
+      <ion-item *ngFor="let airport of arrivalAirports" (click)="selectArrivalAirport(airport)">
+        <ion-label>{{ airport.name }} ({{ airport.iata }})</ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-item *ngIf="selectedArrival">
+      <ion-label>Ziel-Flughafen: {{ selectedArrival.name }} ({{ selectedArrival.iata }})</ion-label>
+      <ion-icon name="close" slot="end" (click)="clearArrival()"></ion-icon>
+    </ion-item>
+
+    <!-- Error Message -->
+    <ion-item *ngIf="errorMessage" color="danger">
+      <ion-label>{{ errorMessage }}</ion-label>
+    </ion-item>
+  </div>
 </ion-content>
