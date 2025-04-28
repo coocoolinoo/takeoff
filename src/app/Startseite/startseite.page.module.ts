@@ -11,6 +11,6 @@ import { StartseitePage } from './startseite.page';
     IonicModule,
     StartseitePage
   ],
-  declarations: [],  // Deklarieren der Seite im Modul
+  declarations: [],
 })
 export class StartseitePageModule {}

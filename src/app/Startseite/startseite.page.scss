@@ -2,9 +2,10 @@
   width: 100%;
   background-color: #6c4bb4;
   background-image: url('../../assets/worldmap.png');
-  background-size: cover; /* Bild wird auf die Größe des Containers angepasst */
-  background-position: center; /* Das Bild wird zentriert */
-  height: 40%; /* Header nimmt 40% des Bildschirms ein, angepasst für mobile Geräte */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: 40vh;
   padding: 1rem 1rem 0.5rem 1rem;
   display: flex;
   justify-content: center;
@@ -15,15 +16,21 @@
 
 .header-bg {
   width: 100%;
-  height: 100%; /* Bild füllt den gesamten Container */
-  position: relative;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
 }
 
 .header-image {
   width: 100%;
+  max-width: 80%;
+  height: auto;
   opacity: 0.4;
-  object-fit: cover; /* Das Bild wird so skaliert, dass es den gesamten Container abdeckt */
 }
+
+
 
 .header-text {
   position: absolute;
@@ -35,14 +42,14 @@
 
   h1 {
     margin: 0;
-    font-size: 1.8rem; /* Kleinere Schriftgröße für mobile Geräte */
+    font-size: 1.8rem;
     font-weight: bold;
     letter-spacing: 1px;
   }
 
   p {
     margin-top: 0.3rem;
-    font-size: 0.9rem; /* Kleinere Schriftgröße für mobile Geräte */
+    font-size: 0.9rem;
     opacity: 0.9;
   }
 }
@@ -149,10 +156,10 @@
     font-weight: bold;
   }
 }
-/* Fügen Sie dies zu Ihrer startseite.page.scss hinzu */
+
 
 .flight-card {
-  /* ... bestehende Styles ... */
+
 
   .input-full {
     width: 100%;
