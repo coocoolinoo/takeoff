@@ -3,13 +3,14 @@ import { AerodataboxService } from '../aerodatabox.service';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FooterPage } from "../footer/footer.page";
 
 @Component({
   selector: 'app-startseite',
   templateUrl: './startseite.page.html',
   styleUrls: ['./startseite.page.scss'],
   standalone: true,
-  imports: [IonicModule, FormsModule, CommonModule]
+  imports: [IonicModule, FormsModule, CommonModule, FooterPage]
 })
 export class StartseitePage {
   departureSearchQuery: string = '';

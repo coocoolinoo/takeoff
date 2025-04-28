@@ -1,18 +1,17 @@
-import { Component, EnvironmentInjector, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { triangle, ellipse, square } from 'ionicons/icons';
+import { home, search, person } from 'ionicons/icons'; // More intuitive icons
 
 @Component({
   selector: 'app-footer',
   templateUrl: 'footer.page.html',
   styleUrls: ['footer.page.scss'],
+  standalone: true,
   imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel],
 })
 export class FooterPage {
-  public environmentInjector = inject(EnvironmentInjector);
-
   constructor() {
-    addIcons({ triangle, ellipse, square });
+    addIcons({ home, search, person }); // Updated icons
   }
 }
