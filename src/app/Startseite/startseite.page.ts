@@ -24,40 +24,45 @@ export class StartseitePage {
   constructor(private airportService: AerodataboxService) {}
 
   searchDepartureAirports(term: string): void {
-    if (term.trim() && !this.selectedDeparture) {
+    if (term.trim().length > 1 && !this.selectedDeparture) {
       this.isLoading = true;
       this.airportService.searchAirports(term).subscribe({
         next: (airports) => {
           this.departureAirports = airports.items || [];
           this.isLoading = false;
+          this.errorMessage = '';
         },
         error: (error) => {
-          this.errorMessage = 'Fehler beim Laden der Flughäfen';
           this.isLoading = false;
+          this.errorMessage = 'Fehler beim Laden der Flughäfen';
         }
       });
     } else {
       this.departureAirports = [];
+      this.errorMessage = '';
     }
   }
 
   searchArrivalAirports(term: string): void {
-    if (term.trim() && !this.selectedArrival) {
+    if (term.trim().length > 1 && !this.selectedArrival) {
       this.isLoading = true;
       this.airportService.searchAirports(term).subscribe({
         next: (airports) => {
           this.arrivalAirports = airports.items || [];
           this.isLoading = false;
+          this.errorMessage = '';
         },
         error: (error) => {
-          this.errorMessage = 'Fehler beim Laden der Flughäfen';
           this.isLoading = false;
+          this.errorMessage = 'Fehler beim Laden der Flughäfen';
         }
       });
     } else {
       this.arrivalAirports = [];
+      this.errorMessage = '';
     }
   }
+
 
   selectDepartureAirport(airport: any): void {
     this.selectedDeparture = airport;
