@@ -5,24 +5,39 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <!-- Map oben -->
   <div class="map-container">
-    <ion-img src="./assets/map.png"></ion-img>
+    <iframe
+      src="https://www.openstreetmap.org/export/embed.html"
+      class="map-iframe"
+      loading="lazy"
+    ></iframe>
   </div>
 
-  <!-- Hintergrundbild hinter der Card -->
   <div class="background-container">
-    <img src="./assets/Background.png" alt="Hintergrundbild" class="background-image" />
+    <img src="assets/Background.png" alt="Hintergrund" class="background-image" />
   </div>
 
   <div class="flight-card">
     <ion-card>
       <ion-card-header>
-        <ion-card-title>Flugsuche</ion-card-title>
+        <ion-card-title>Gefundene Flüge</ion-card-title>
       </ion-card-header>
-
       <ion-card-content>
-        <!-- Hier bleibt die Card leer -->
+        <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+
+        <ion-list *ngIf="!isLoading && flights.length > 0">
+          <ion-item *ngFor="let flight of flights">
+            {{ flight.flightNumber || 'Unbekannt' }} – {{ flight.airline?.name || 'Unbekannte Airline' }}
+          </ion-item>
+        </ion-list>
+
+        <ion-text color="danger" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </ion-text>
+
+        <ion-text color="medium" *ngIf="!isLoading && flights.length === 0 && !errorMessage">
+          Keine Flüge gefunden.
+        </ion-text>
       </ion-card-content>
     </ion-card>
   </div>
@@ -30,9 +45,6 @@
 
 <ion-footer>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button routerLink="/startseite">Startseite</ion-button>
-    </ion-buttons>
-    <ion-title>Flugsuche</ion-title>
+    <ion-title size="small">© 2025 Deine Flug-App</ion-title>
   </ion-toolbar>
 </ion-footer>

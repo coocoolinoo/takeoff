@@ -1,10 +1,26 @@
-.background-container {
+.map-container {
   position: absolute;
-  width: 100%;
-  height: 100%;
   top: 0;
   left: 0;
-  z-index: -2;
+  width: 100%;
+  height: 300px;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.map-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.background-container {
+  position: absolute;
+  top: 300px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 300px);
+  z-index: 0;
 }
 
 .background-image {
@@ -13,31 +29,13 @@
   object-fit: cover;
 }
 
-.map-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 200px;
-  z-index: 1;
-  overflow: hidden;
-}
-
 .flight-card {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  z-index: 2;
-}
-
-ion-card {
-  width: 90%;
-  max-width: 400px;
+  position: absolute;
+  top: 250px;
+  left: 0;
+  right: 0;
   margin: 0 auto;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-ion-footer {
-  z-index: 3;
+  width: 90%;
+  max-width: 430px;
+  z-index: 2;
 }
