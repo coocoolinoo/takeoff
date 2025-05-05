@@ -9,8 +9,8 @@ import { StartseitePage } from './startseite.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    StartseitePage
+    StartseitePage,
   ],
-  declarations: [],
+  declarations: []
 })
 export class StartseitePageModule {}

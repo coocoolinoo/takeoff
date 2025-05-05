@@ -13,8 +13,12 @@ import { FooterPage } from "../footer/footer.page";
   imports: [IonicModule, FormsModule, CommonModule, FooterPage]
 })
 export class StartseitePage {
-  departureSearchQuery: string = '';
-  arrivalSearchQuery: string = '';
+  departureQuery: string = '';
+  arrivalQuery: string = '';
+  departureDate: string = '';
+  returnDate: string = '';
+  passengers: number = 1;
+
   departureAirports: any[] = [];
   arrivalAirports: any[] = [];
   selectedDeparture: { name: string, iata: string } | null = null;
@@ -64,16 +68,15 @@ export class StartseitePage {
     }
   }
 
-
   selectDepartureAirport(airport: any): void {
     this.selectedDeparture = airport;
-    this.departureSearchQuery = `${airport.name} (${airport.iata})`;
+    this.departureQuery = `${airport.name} (${airport.iata})`;
     this.departureAirports = [];
   }
 
   selectArrivalAirport(airport: any): void {
     this.selectedArrival = airport;
-    this.arrivalSearchQuery = `${airport.name} (${airport.iata})`;
+    this.arrivalQuery = `${airport.name} (${airport.iata})`;
     this.arrivalAirports = [];
   }
 
@@ -84,21 +87,21 @@ export class StartseitePage {
 
     // Update search queries
     if (this.selectedDeparture) {
-      this.departureSearchQuery = `${this.selectedDeparture.name} (${this.selectedDeparture.iata})`;
+      this.departureQuery = `${this.selectedDeparture.name} (${this.selectedDeparture.iata})`;
     }
     if (this.selectedArrival) {
-      this.arrivalSearchQuery = `${this.selectedArrival.name} (${this.selectedArrival.iata})`;
+      this.arrivalQuery = `${this.selectedArrival.name} (${this.selectedArrival.iata})`;
     }
   }
 
   clearDeparture(): void {
     this.selectedDeparture = null;
-    this.departureSearchQuery = '';
+    this.departureQuery = '';
   }
 
   clearArrival(): void {
     this.selectedArrival = null;
-    this.arrivalSearchQuery = '';
+    this.arrivalQuery = '';
   }
 
   clearDepartureAirportsDelayed(): void {
@@ -115,5 +118,25 @@ export class StartseitePage {
         this.arrivalAirports = [];
       }
     }, 300);
+  }
+
+  // Passengers Methods
+  increasePassengers(): void {
+    this.passengers++;
+  }
+
+  decreasePassengers(): void {
+    if (this.passengers > 1) {
+      this.passengers--;
+    }
+  }
+
+  // Date Methods
+  setDepartureDate(event: any): void {
+    this.departureDate = event.target.value;
+  }
+
+  setReturnDate(event: any): void {
+    this.returnDate = event.target.value;
   }
 }

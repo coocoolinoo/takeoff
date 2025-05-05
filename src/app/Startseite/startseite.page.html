@@ -13,12 +13,10 @@
   </div>
 
   <div class="flight-card">
-    <!-- Abflughafen Section -->
     <ion-item>
-      <ion-label position="floating">Abflughafen</ion-label>
       <ion-input
-        [(ngModel)]="departureSearchQuery"
-        (ionInput)="searchDepartureAirports(departureSearchQuery || '')"
+        [(ngModel)]="departureQuery"
+        (ionInput)="searchDepartureAirports(departureQuery || '')"
         (ionBlur)="clearDepartureAirportsDelayed()"
         placeholder="Flughafen suchen"
       ></ion-input>
@@ -29,6 +27,7 @@
       <ion-item *ngFor="let airport of departureAirports" (click)="selectDepartureAirport(airport)">
         <ion-label>{{ airport.name }} ({{ airport.iata }})</ion-label>
       </ion-item>
+
     </ion-list>
 
     <ion-item *ngIf="selectedDeparture">
@@ -36,19 +35,16 @@
       <ion-icon name="close" slot="end" (click)="clearDeparture()"></ion-icon>
     </ion-item>
 
-    <!-- Swap Button -->
     <div class="swap-button">
       <ion-button (click)="swapAirports()" fill="clear">
         <ion-icon name="swap-vertical"></ion-icon>
       </ion-button>
     </div>
 
-    <!-- Ziel-Flughafen Section -->
     <ion-item>
-      <ion-label position="floating">Ziel-Flughafen</ion-label>
       <ion-input
-        [(ngModel)]="arrivalSearchQuery"
-        (ionInput)="searchArrivalAirports(arrivalSearchQuery || '')"
+        [(ngModel)]="arrivalQuery"
+        (ionInput)="searchArrivalAirports(arrivalQuery || '')"
         (ionBlur)="clearArrivalAirportsDelayed()"
         placeholder="Ziel-Flughafen suchen"
       ></ion-input>
@@ -65,8 +61,42 @@
       <ion-label>Ziel-Flughafen: {{ selectedArrival.name }} ({{ selectedArrival.iata }})</ion-label>
       <ion-icon name="close" slot="end" (click)="clearArrival()"></ion-icon>
     </ion-item>
+    <ion-label position="floating">Abflugdatum</ion-label>
+    <ion-item>
 
-    <!-- Error Message -->
+      <ion-input
+        [(ngModel)]="departureDate"
+        (ionInput)="setDepartureDate($event)"
+        type="date"
+        placeholder=""
+      ></ion-input>
+    </ion-item>
+    <ion-label position="floating">Rückflugdatum</ion-label>
+    <ion-item>
+
+      <ion-input
+        [(ngModel)]="returnDate"
+        (ionInput)="setReturnDate($event)"
+        type="date"
+        placeholder=""
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Passagiere</ion-label>
+      <ion-input
+        [(ngModel)]="passengers"
+        type="number"
+        min="1"
+        max="10"
+        readonly
+      ></ion-input>
+      <ion-buttons slot="end">
+        <ion-button (click)="decreasePassengers()">-</ion-button>
+        <ion-button (click)="increasePassengers()">+</ion-button>
+      </ion-buttons>
+    </ion-item>
+
     <ion-item *ngIf="errorMessage" color="danger">
       <ion-label>{{ errorMessage }}</ion-label>
     </ion-item>

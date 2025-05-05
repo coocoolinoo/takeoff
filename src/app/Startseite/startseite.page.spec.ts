@@ -3,7 +3,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
-
 import { StartseitePage } from './startseite.page';
 import { AerodataboxService } from '../aerodatabox.service';
 
@@ -13,7 +12,7 @@ describe('StartseitePage', () => {
   let aerodataboxService: jasmine.SpyObj<AerodataboxService>;
 
   beforeEach(waitForAsync(() => {
-    const aerodataboxSpy = jasmine.createSpyObj('AerodataboxService', ['searchAirports']);
+    const aerodataboxSpy = jasmine.createSpyObj('AerodataboxService', ['searchAirports', 'getFlightDates']);
 
     TestBed.configureTestingModule({
       declarations: [StartseitePage],
@@ -35,6 +34,4 @@ describe('StartseitePage', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-
 });
