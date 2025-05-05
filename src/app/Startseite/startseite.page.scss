@@ -32,61 +32,35 @@
 .flight-card {
   position: relative;
   z-index: 1;
-  margin-top: 20px;
-}
-
-.header-section {
   width: 100%;
-  background-color: #6c4bb4;
-  background-image: url('../../assets/worldmap.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center center;
-  height: 40vh;
-  padding: 1rem 1rem 0.5rem 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  z-index: 1;
-}
-
-.header-bg {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-}
-
-.header-image {
-  width: 100%;
-  max-width: 80%;
-  height: auto;
-  opacity: 0.4;
-}
-
-.header-text {
-  position: absolute;
-  top: 1.2rem;
-  left: 1.2rem;
-  text-align: left;
-  color: white;
+  max-width: 400px;
+  margin: 60px auto;
+  border-radius: 20px;
+  padding: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  background: #fff;
   z-index: 2;
+}
 
-  h1 {
-    margin: 0;
-    font-size: 1.8rem;
-    font-weight: bold;
-    letter-spacing: 1px;
-  }
+.autocomplete-list {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 5;
+  position: relative;
+}
 
-  p {
-    margin-top: 0.3rem;
-    font-size: 0.9rem;
-    opacity: 0.9;
-  }
+.input-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.search-button {
+  margin-top: 1.5rem;
 }
 
 .startseite-content {
@@ -101,142 +75,29 @@
   min-height: 100vh;
   position: relative;
   z-index: 1;
-}
-
-.background-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-
-  .backgroundbild {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.2;
-  }
-}
-
-.flight-card {
-  width: 100%;
-  max-width: 400px;
-  margin: 60px auto;
-  border-radius: 20px;
-  padding: 1rem;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  background: #fff;
-  z-index: 2;
-
-  ion-item {
-    margin-bottom: 0.5rem;
-  }
-
-  .trip-toggle {
-    margin-bottom: 1rem;
-  }
-
-  .input-section {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    position: relative;
-    margin-bottom: 1rem;
-
-    .input-full {
-      width: 100%;
-    }
-
-    .swap-button {
-      align-self: center;
-      margin: 0.5rem 0;
-    }
-  }
-
-  .autocomplete-list {
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 5;
-    position: relative;
-
-    ion-item {
-      font-size: 0.9rem;
-    }
-  }
-
-  .input-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    margin: 1rem 0;
-
-    ion-item {
-      flex: 1;
-      --background: #f1f1f1;
-      --border-radius: 10px;
-      --padding-start: 0.5rem;
-      --padding-end: 0.5rem;
-    }
-  }
-
-  .search-button {
-    margin-top: 1rem;
-    background: #d1792b;
-    color: white;
-    font-weight: bold;
-  }
-}
-
-.flight-card {
-  .input-full {
-    width: 100%;
-    margin-bottom: 0.5rem;
-  }
-
-  .autocomplete-list {
-    width: 100%;
-    max-height: 200px;
-    overflow-y: auto;
-    position: absolute;
-    z-index: 1000;
-    margin-top: -0.5rem;
-    border-radius: 0 0 10px 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background: white;
-
-    ion-item {
-      --padding-start: 1rem;
-      --padding-end: 1rem;
-      --min-height: 3rem;
-      font-size: 0.9rem;
-
-      &:hover {
-        background-color: #f5f5f5;
-      }
-    }
-  }
-
-  .swap-button {
-    margin: 0.5rem 0;
-    display: flex;
-    justify-content: center;
-    width: 100%;
-
-    ion-button {
-      --padding-start: 0;
-      --padding-end: 0;
-    }
-  }
-
-  .search-button {
-    margin-top: 1.5rem;
-  }
-}
-
-.startseite-content {
   padding-bottom: 80px;
+}
+
+.swap-button-inline {
+  display: flex;
+  justify-content: center;
+  margin: 0.5rem 0;
+}
+
+.swap-button-inline button {
+  background: #ffffff;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  width: 50px;
+  height: 50px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swap-button-inline img {
+  width: 24px;
+  height: 24px;
 }
