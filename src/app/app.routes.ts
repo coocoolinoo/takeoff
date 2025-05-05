@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { StartseitePage } from './Startseite/startseite.page';
 import { FlugsuchePage } from './Flugsuche/flugsuche.page';
-import { Tab2Page } from './tab2/tab2.page'; // Make sure this exists
+import { Tab2Page } from './tab2/tab2.page';
 
 export const routes: Routes = [
   {

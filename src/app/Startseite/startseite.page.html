@@ -99,6 +99,10 @@
     <ion-item *ngIf="errorMessage" color="danger">
       <ion-label>{{ errorMessage }}</ion-label>
     </ion-item>
+
+    <ion-button expand="block" color="primary" class="search-button" [routerLink]="['/flugsuche']">
+      Flugsuche
+    </ion-button>
   </div>
 </ion-content>
 

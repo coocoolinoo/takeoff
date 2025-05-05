@@ -1,32 +1,33 @@
 import { Component } from '@angular/core';
 import { AerodataboxService } from '../aerodatabox.service';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, NavController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FooterPage } from "../footer/footer.page";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-startseite',
   templateUrl: './startseite.page.html',
   styleUrls: ['./startseite.page.scss'],
   standalone: true,
-  imports: [IonicModule, FormsModule, CommonModule, FooterPage]
+  imports: [IonicModule, FormsModule, CommonModule, FooterPage, RouterLink]
 })
 export class StartseitePage {
-  departureQuery: string = '';
-  arrivalQuery: string = '';
-  departureDate: string = '';
-  returnDate: string = '';
-  passengers: number = 1;
+  departureQuery = '';
+  arrivalQuery = '';
+  departureDate = '';
+  returnDate = '';
+  passengers = 1;
 
   departureAirports: any[] = [];
   arrivalAirports: any[] = [];
   selectedDeparture: { name: string, iata: string } | null = null;
   selectedArrival: { name: string, iata: string } | null = null;
-  isLoading: boolean = false;
-  errorMessage: string = '';
+  isLoading = false;
+  errorMessage = '';
 
-  constructor(private airportService: AerodataboxService) {}
+  constructor(private airportService: AerodataboxService, private navCtrl: NavController) {}
 
   searchDepartureAirports(term: string): void {
     if (term.trim().length > 1 && !this.selectedDeparture) {
@@ -37,7 +38,7 @@ export class StartseitePage {
           this.isLoading = false;
           this.errorMessage = '';
         },
-        error: (error) => {
+        error: () => {
           this.isLoading = false;
           this.errorMessage = 'Fehler beim Laden der Flughäfen';
         }
@@ -57,7 +58,7 @@ export class StartseitePage {
           this.isLoading = false;
           this.errorMessage = '';
         },
-        error: (error) => {
+        error: () => {
           this.isLoading = false;
           this.errorMessage = 'Fehler beim Laden der Flughäfen';
         }
@@ -85,7 +86,6 @@ export class StartseitePage {
     this.selectedDeparture = this.selectedArrival;
     this.selectedArrival = temp;
 
-    // Update search queries
     if (this.selectedDeparture) {
       this.departureQuery = `${this.selectedDeparture.name} (${this.selectedDeparture.iata})`;
     }
@@ -120,7 +120,6 @@ export class StartseitePage {
     }, 300);
   }
 
-  // Passengers Methods
   increasePassengers(): void {
     this.passengers++;
   }
@@ -131,12 +130,15 @@ export class StartseitePage {
     }
   }
 
-  // Date Methods
   setDepartureDate(event: any): void {
     this.departureDate = event.target.value;
   }
 
   setReturnDate(event: any): void {
     this.returnDate = event.target.value;
+  }
+
+  navigateToFlightSearch(): void {
+    this.navCtrl.navigateForward('/flugsuche');
   }
 }
