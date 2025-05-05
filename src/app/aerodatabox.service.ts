@@ -7,7 +7,7 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AerodataboxService {
-  private readonly apiUrl = 'https://aerodatabox.p.rapidapi.com/flights';
+  private readonly searchUrl = 'https://aerodatabox.p.rapidapi.com/airports/search/term';
 
   constructor(private http: HttpClient) {}
 
@@ -19,7 +19,7 @@ export class AerodataboxService {
       .set('limit', '5')
       .set('withFlightInfoOnly', 'true');
 
-    return this.http.get(this.apiUrl, {
+    return this.http.get(this.searchUrl, {
       headers: {
         'X-RapidAPI-Key': 'dd83395831msh3c5c21df7e6a51ep1c5847jsn2ec550d55641',
         'X-RapidAPI-Host': 'aerodatabox.p.rapidapi.com'
@@ -30,25 +30,16 @@ export class AerodataboxService {
     );
   }
 
+  getFlightsFromAirport(iataCode: string, date: string): Observable<any> {
+    const url = `https://aerodatabox.p.rapidapi.com/flights/airports/icao/${iataCode}/${date}T00:00/${date}T23:59`;
 
-  getFlights(filters: { departureAirport: string, arrivalAirport: string, departureDate: string, returnDate: string, passengers: number }): Observable<any> {
-    const { departureAirport, arrivalAirport, departureDate, returnDate, passengers } = filters;
-
-    const params = new HttpParams()
-      .set('departureAirport', departureAirport)
-      .set('arrivalAirport', arrivalAirport)
-      .set('departureDate', departureDate)
-      .set('returnDate', returnDate)
-      .set('passengers', passengers.toString());
-
-    return this.http.get(this.apiUrl, {
+    return this.http.get(url, {
       headers: {
         'X-RapidAPI-Key': 'dd83395831msh3c5c21df7e6a51ep1c5847jsn2ec550d55641',
         'X-RapidAPI-Host': 'aerodatabox.p.rapidapi.com'
-      },
-      params
+      }
     }).pipe(
-      catchError(() => of([]))
+      catchError(() => of({ departures: [] }))
     );
   }
 }

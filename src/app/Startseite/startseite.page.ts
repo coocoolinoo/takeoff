@@ -3,8 +3,8 @@ import { AerodataboxService } from '../aerodatabox.service';
 import { IonicModule, NavController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FooterPage } from "../footer/footer.page";
-import {RouterLink} from "@angular/router";
+import { FooterPage } from '../footer/footer.page';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-startseite',
