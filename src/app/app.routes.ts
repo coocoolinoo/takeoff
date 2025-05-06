@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { FooterPage } from './footer/footer.page';
+import {FlugsuchePage} from "./Flugsuche/flugsuche.page";
 
 export const routes: Routes = [
   {
