@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { home, search, person } from 'ionicons/icons'; // More intuitive icons
+import { home, search, person } from 'ionicons/icons';
 
 @Component({
   selector: 'app-footer',
@@ -11,7 +12,13 @@ import { home, search, person } from 'ionicons/icons'; // More intuitive icons
   imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel],
 })
 export class FooterPage {
-  constructor() {
-    addIcons({ home, search, person }); // Updated icons
+
+  constructor(private router: Router) {
+    addIcons({ home, search, person });
+  }
+
+
+  navigateToStartseite() {
+    this.router.navigateByUrl('/footer/startseite');
   }
 }

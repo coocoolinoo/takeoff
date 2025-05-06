@@ -1,24 +1,31 @@
 import { Routes } from '@angular/router';
-import { StartseitePage } from './Startseite/startseite.page';
-import { FlugsuchePage } from './Flugsuche/flugsuche.page';
-import { Tab2Page } from './tab2/tab2.page';
+import { FooterPage } from './footer/footer.page';
 
 export const routes: Routes = [
   {
+    path: 'footer',
+    component: FooterPage,
+    children: [
+      {
+        path: 'startseite',
+        loadComponent: () =>
+          import('./Startseite/startseite.page').then((m) => m.StartseitePage),
+      },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('./tab2/tab2.page').then((m) => m.Tab2Page),
+      },
+      {
+        path: '',
+        redirectTo: 'startseite',
+        pathMatch: 'full',
+      },
+    ],
+  },
+  {
     path: '',
-    redirectTo: 'startseite',
-    pathMatch: 'full'
+    redirectTo: 'footer/startseite',
+    pathMatch: 'full',
   },
-  {
-    path: 'startseite',
-    component: StartseitePage
-  },
-  {
-    path: 'flugsuche',
-    component: FlugsuchePage
-  },
-  {
-    path: 'profile',
-    component: Tab2Page
-  }
 ];
