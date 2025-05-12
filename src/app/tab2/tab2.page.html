@@ -1,32 +1,89 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 2
+      {{ isRegistered ? 'Welcome' : 'Register' }}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div *ngIf="!isRegistered">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Create Account</ion-card-title>
+      </ion-card-header>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+      <ion-card-content>
+        <form (ngSubmit)="registerUser()">
+          <ion-item>
+            <ion-label position="floating">First Name</ion-label>
+            <ion-input
+              type="text"
+              [(ngModel)]="user.firstName"
+              name="firstName"
+              required>
+            </ion-input>
+          </ion-item>
 
-  <ion-card>
-    <img alt="Logo TakeOff" src="./assets/takeoff.png" />
-    <ion-card-header>
-      <ion-card-title>TakeOff</ion-card-title>
-      <ion-card-subtitle>Banana</ion-card-subtitle>
-    </ion-card-header>
+          <ion-item>
+            <ion-label position="floating">Last Name</ion-label>
+            <ion-input
+              type="text"
+              [(ngModel)]="user.lastName"
+              name="lastName"
+              required>
+            </ion-input>
+          </ion-item>
 
-    <ion-card-content>
-      Here's a small text description for the card content. Nothing more, nothing less.
-    </ion-card-content>
-  </ion-card>
+          <ion-item>
+            <ion-label position="floating">Email</ion-label>
+            <ion-input
+              type="email"
+              [(ngModel)]="user.email"
+              name="email"
+              required>
+            </ion-input>
+          </ion-item>
 
+          <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input
+              type="password"
+              [(ngModel)]="user.password"
+              name="password"
+              required>
+            </ion-input>
+          </ion-item>
+
+          <ion-button
+            expand="block"
+            type="submit"
+            class="ion-margin-top"
+            [disabled]="!user.firstName || !user.lastName || !user.email || !user.password">
+            Register
+          </ion-button>
+
+          <ion-toast
+            [isOpen]="showError"
+            message="Please fill all fields!"
+            duration="3000"
+            [position]="'top'"
+            (didDismiss)="showError = false">
+          </ion-toast>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div *ngIf="isRegistered" class="welcome-message">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Welcome {{ user.firstName }} {{ user.lastName }}!</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>You are registered with: {{ user.email }}</p>
+        <ion-button expand="block" (click)="logout()">Logout</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>
-
-<app-footer></app-footer>
