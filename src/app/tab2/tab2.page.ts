@@ -1,22 +1,18 @@
 import { Component } from '@angular/core';
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonItem,
-  IonLabel,
-  IonInput,
-  IonButton,
-  IonToast
+  IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardContent,
+  IonCardHeader, IonCardSubtitle, IonCardTitle, IonItem, IonLabel,
+  IonInput, IonButton, IonToast, IonIcon, IonButtons, IonBackButton
 } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { addIcons } from 'ionicons';
+import {
+  airplane, personCircleOutline, peopleCircleOutline, mailOpenOutline,
+  lockClosedOutline, rocketOutline, exitOutline, searchOutline,
+  homeOutline, chevronBackOutline
+} from 'ionicons/icons';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab2',
@@ -24,22 +20,10 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['tab2.page.scss'],
   standalone: true,
   imports: [
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonItem,
-    IonLabel,
-    IonInput,
-    IonButton,
-    IonToast,
-    FormsModule,
-    CommonModule
+    IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardContent,
+    IonCardHeader, IonCardSubtitle, IonCardTitle, IonItem, IonLabel,
+    IonInput, IonButton, IonToast, IonIcon, IonButtons, IonBackButton,
+    FormsModule, CommonModule
   ]
 })
 export class Tab2Page {
@@ -52,8 +36,15 @@ export class Tab2Page {
 
   isRegistered = false;
   showError = false;
+  confetti = Array(50).fill(0);
+  randomTicket = Math.floor(Math.random() * 900000);
 
-  constructor() {
+  constructor(private router: Router) {
+    addIcons({
+      airplane, personCircleOutline, peopleCircleOutline, mailOpenOutline,
+      lockClosedOutline, rocketOutline, exitOutline, searchOutline,
+      homeOutline, chevronBackOutline
+    });
     this.checkRegistration();
   }
 
@@ -71,19 +62,16 @@ export class Tab2Page {
       return;
     }
 
-    try {
-      localStorage.setItem('currentUser', JSON.stringify(this.user));
-      this.isRegistered = true;
-      this.showError = false;
-    } catch (e) {
-      this.showError = true;
-      console.error('Registration error:', e);
-    }
+    localStorage.setItem('currentUser', JSON.stringify(this.user));
+    this.isRegistered = true;
+    this.randomTicket = Math.floor(Math.random() * 900000);
+    this.router.navigate(['/tabs/tab2'], { replaceUrl: true });
   }
 
   logout() {
     localStorage.removeItem('currentUser');
     this.isRegistered = false;
     this.user = { firstName: '', lastName: '', email: '', password: '' };
+    this.router.navigate(['/tabs/tab2'], { replaceUrl: true });
   }
 }

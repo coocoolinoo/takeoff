@@ -1,88 +1,102 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      {{ isRegistered ? 'Welcome' : 'Register' }}
+  <ion-toolbar class="header-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab1" *ngIf="isRegistered" class="back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="header-title">
+      <span class="title-gradient">{{ isRegistered ? 'Welcome ✈️' : 'Take Flight' }}</span>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <div *ngIf="!isRegistered">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Create Account</ion-card-title>
+<ion-content [fullscreen]="true" class="content-bg">
+  <div class="dynamic-background">
+    <div class="airplane-track">
+      <ion-icon name="airplane" class="flying-plane" *ngIf="!isRegistered"></ion-icon>
+    </div>
+  </div>
+
+  <div *ngIf="!isRegistered" @fadeIn class="form-container">
+    <ion-card class="glass-card">
+      <ion-card-header class="card-header">
+        <img src="assets/takeoff.png" class="app-logo">
+        <ion-card-title class="card-title">Ready for Takeoff</ion-card-title>
+        <ion-card-subtitle class="card-subtitle">Create your travel profile</ion-card-subtitle>
       </ion-card-header>
 
       <ion-card-content>
-        <form (ngSubmit)="registerUser()">
-          <ion-item>
+        <form (ngSubmit)="registerUser()" #registrationForm="ngForm" class="auth-form">
+          <ion-item lines="none" class="form-item floating-item">
+            <ion-icon name="person-circle-outline" slot="start" class="input-icon"></ion-icon>
             <ion-label position="floating">First Name</ion-label>
-            <ion-input
-              type="text"
-              [(ngModel)]="user.firstName"
-              name="firstName"
-              required>
-            </ion-input>
+            <ion-input type="text" [(ngModel)]="user.firstName" name="firstName" required></ion-input>
           </ion-item>
 
-          <ion-item>
+          <ion-item lines="none" class="form-item floating-item">
+            <ion-icon name="people-circle-outline" slot="start" class="input-icon"></ion-icon>
             <ion-label position="floating">Last Name</ion-label>
-            <ion-input
-              type="text"
-              [(ngModel)]="user.lastName"
-              name="lastName"
-              required>
-            </ion-input>
+            <ion-input type="text" [(ngModel)]="user.lastName" name="lastName" required></ion-input>
           </ion-item>
 
-          <ion-item>
+          <ion-item lines="none" class="form-item floating-item">
+            <ion-icon name="mail-open-outline" slot="start" class="input-icon"></ion-icon>
             <ion-label position="floating">Email</ion-label>
-            <ion-input
-              type="email"
-              [(ngModel)]="user.email"
-              name="email"
-              required>
-            </ion-input>
+            <ion-input type="email" [(ngModel)]="user.email" name="email" required></ion-input>
           </ion-item>
 
-          <ion-item>
+          <ion-item lines="none" class="form-item floating-item">
+            <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
             <ion-label position="floating">Password</ion-label>
-            <ion-input
-              type="password"
-              [(ngModel)]="user.password"
-              name="password"
-              required>
-            </ion-input>
+            <ion-input type="password" [(ngModel)]="user.password" name="password" required></ion-input>
           </ion-item>
 
-          <ion-button
-            expand="block"
-            type="submit"
-            class="ion-margin-top"
-            [disabled]="!user.firstName || !user.lastName || !user.email || !user.password">
-            Register
+          <ion-button expand="block" type="submit" shape="round" class="submit-btn" [disabled]="!registrationForm.valid">
+            <ion-icon name="rocket-outline" slot="start"></ion-icon>
+            Board Now
           </ion-button>
-
-          <ion-toast
-            [isOpen]="showError"
-            message="Please fill all fields!"
-            duration="3000"
-            [position]="'top'"
-            (didDismiss)="showError = false">
-          </ion-toast>
         </form>
       </ion-card-content>
     </ion-card>
   </div>
 
-  <div *ngIf="isRegistered" class="welcome-message">
-    <ion-card>
+  <div *ngIf="isRegistered" @slideUp class="welcome-screen">
+    <div class="confetti-container">
+      <div class="confetti" *ngFor="let item of confetti"></div>
+    </div>
+
+    <ion-card class="welcome-card glass-card">
+      <div class="success-animation">
+        <svg class="checkmark" viewBox="0 0 52 52">
+          <path class="checkmark-path" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+        </svg>
+      </div>
+
       <ion-card-header>
-        <ion-card-title>Welcome {{ user.firstName }} {{ user.lastName }}!</ion-card-title>
+        <ion-card-title class="welcome-title">Welcome Aboard,<br>{{ user.firstName }}!</ion-card-title>
       </ion-card-header>
+
       <ion-card-content>
-        <p>You are registered with: {{ user.email }}</p>
-        <ion-button expand="block" (click)="logout()">Logout</ion-button>
+        <p class="welcome-text">Your boarding pass is ready</p>
+        <div class="boarding-pass">
+          <div class="pass-detail">
+            <span>Passenger</span>
+            <strong>{{ user.firstName }} {{ user.lastName }}</strong>
+          </div>
+          <div class="pass-detail">
+            <span>Ticket Number</span>
+            <strong>TK{{ 100000 + randomTicket }}</strong>
+          </div>
+        </div>
+
+        <ion-button expand="block" shape="round" class="action-btn" routerLink="/footer/startseite" routerDirection="root">
+          <ion-icon name="search-outline" slot="start"></ion-icon>
+          Find Flights
+        </ion-button>
+
+        <ion-button expand="block" fill="clear" class="logout-btn" (click)="logout()">
+          <ion-icon name="exit-outline" slot="end"></ion-icon>
+          Sign Out
+        </ion-button>
       </ion-card-content>
     </ion-card>
   </div>
