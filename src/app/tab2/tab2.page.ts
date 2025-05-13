@@ -65,13 +65,15 @@ export class Tab2Page {
     localStorage.setItem('currentUser', JSON.stringify(this.user));
     this.isRegistered = true;
     this.randomTicket = Math.floor(Math.random() * 900000);
-    this.router.navigate(['/tabs/tab2'], { replaceUrl: true });
   }
 
   logout() {
     localStorage.removeItem('currentUser');
     this.isRegistered = false;
     this.user = { firstName: '', lastName: '', email: '', password: '' };
-    this.router.navigate(['/tabs/tab2'], { replaceUrl: true });
+  }
+
+  navigateToStartseite() {
+    this.router.navigate(['/footer/startseite'], { replaceUrl: true });
   }
 }

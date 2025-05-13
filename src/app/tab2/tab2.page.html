@@ -88,7 +88,8 @@
           </div>
         </div>
 
-        <ion-button expand="block" shape="round" class="action-btn" routerLink="/footer/startseite" routerDirection="root">
+        <ion-button expand="block" shape="round" class="action-btn"
+                    (click)="navigateToStartseite()">
           <ion-icon name="search-outline" slot="start"></ion-icon>
           Find Flights
         </ion-button>
