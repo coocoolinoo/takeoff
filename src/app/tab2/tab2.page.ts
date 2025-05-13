@@ -22,7 +22,7 @@ import { Router } from '@angular/router';
   imports: [
     IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardContent,
     IonCardHeader, IonCardSubtitle, IonCardTitle, IonItem, IonLabel,
-    IonInput, IonButton, IonToast, IonIcon, IonButtons, IonBackButton,
+    IonInput, IonButton, IonIcon, IonButtons, IonBackButton,
     FormsModule, CommonModule
   ]
 })
