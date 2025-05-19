@@ -1,0 +1,40 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Flugdetails</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="map-container">
+    <iframe
+      src="https://www.openstreetmap.org/export/embed.html"
+      class="map-iframe"
+      loading="lazy"
+    ></iframe>
+  </div>
+
+  <div class="background-container">
+    <img src="assets/Background.png" alt="Hintergrund" class="background-image" />
+  </div>
+
+  <div class="flight-details-card">
+    <ion-card *ngIf="flight">
+      <ion-card-header>
+        <ion-card-title>{{ flight.flightNumber || 'Unbekannt' }} – {{ flight.airline?.name || 'Unbekannte Airline' }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Abflugzeit:</strong> {{ flight.departure?.scheduledTimeLocal }}</p>
+        <p><strong>Ankunftszeit:</strong> {{ flight.arrival?.scheduledTimeLocal }}</p>
+        <p><strong>Terminal:</strong> {{ flight.departure?.terminal || 'Unbekannt' }}</p>
+        <p><strong>Gate:</strong> {{ flight.departure?.gate || 'Unbekannt' }}</p>
+        <p><strong>Ziel:</strong> {{ flight.arrival?.airport?.name || 'Unbekannt' }} ({{ flight.arrival?.airport?.icao || '---' }})</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-title size="small">© 2025 Deine Flug-App</ion-title>
+  </ion-toolbar>
+</ion-footer>

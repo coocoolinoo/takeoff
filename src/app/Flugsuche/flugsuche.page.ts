@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AerodataboxService } from '../aerodatabox.service';
 
 @Component({
@@ -13,19 +13,32 @@ import { AerodataboxService } from '../aerodatabox.service';
 })
 export class FlugsuchePage {
   selectedDeparture: any = null;
+  selectedArrival: any = null;
   departureDate: string = '';
+  returnDate: string = '';
+  passengers: number = 1;
   flights: any[] = [];
   isLoading = false;
   errorMessage = '';
 
-  constructor(private route: ActivatedRoute, private aeroService: AerodataboxService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private aeroService: AerodataboxService
+  ) {}
 
   ngOnInit(): void {
-    const state = history.state;
-    this.selectedDeparture = state.selectedDeparture || null;
-    this.departureDate = state.departureDate || '';
-    if (this.selectedDeparture && this.departureDate) {
-      this.loadFlights();
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras.state) {
+      this.selectedDeparture = navigation.extras.state['selectedDeparture'];
+      this.departureDate = navigation.extras.state['departureDate'];
+      this.selectedArrival = navigation.extras.state['selectedArrival'];
+      this.returnDate = navigation.extras.state['returnDate'];
+      this.passengers = navigation.extras.state['passengers'];
+
+      if (this.selectedDeparture && this.departureDate) {
+        this.loadFlights();
+      }
     }
   }
 

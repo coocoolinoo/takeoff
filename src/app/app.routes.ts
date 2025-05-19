@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { FooterPage } from './footer/footer.page';
-import {FlugsuchePage} from "./Flugsuche/flugsuche.page";
 
 export const routes: Routes = [
   {
@@ -16,6 +15,11 @@ export const routes: Routes = [
         path: 'profile',
         loadComponent: () =>
           import('./tab2/tab2.page').then((m) => m.Tab2Page),
+      },
+      {
+        path: 'flugsuche',
+        loadComponent: () =>
+          import('./Flugsuche/flugsuche.page').then((m) => m.FlugsuchePage),
       },
       {
         path: '',
