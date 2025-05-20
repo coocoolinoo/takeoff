@@ -4,7 +4,7 @@ import { IonicModule, NavController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FooterPage } from '../footer/footer.page';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 
 @Component({
   selector: 'app-startseite',
@@ -16,8 +16,8 @@ import { RouterLink } from '@angular/router';
 export class StartseitePage {
   departureQuery = '';
   arrivalQuery = '';
-  departureDate = '';
-  returnDate = '';
+  departureDate: string = '';
+  returnDate: string = '';
   passengers = 1;
 
   departureAirports: any[] = [];
@@ -27,7 +27,11 @@ export class StartseitePage {
   isLoading = false;
   errorMessage = '';
 
-  constructor(private airportService: AerodataboxService, private navCtrl: NavController) {}
+  constructor(
+    private airportService: AerodataboxService,
+    private navCtrl: NavController,
+    private router: Router
+  ) {}
 
   searchDepartureAirports(term: string): void {
     if (term.trim().length > 1 && !this.selectedDeparture) {
@@ -36,7 +40,6 @@ export class StartseitePage {
         next: (airports) => {
           this.departureAirports = airports.items || [];
           this.isLoading = false;
-          this.errorMessage = '';
         },
         error: () => {
           this.isLoading = false;
@@ -45,7 +48,6 @@ export class StartseitePage {
       });
     } else {
       this.departureAirports = [];
-      this.errorMessage = '';
     }
   }
 
@@ -56,7 +58,6 @@ export class StartseitePage {
         next: (airports) => {
           this.arrivalAirports = airports.items || [];
           this.isLoading = false;
-          this.errorMessage = '';
         },
         error: () => {
           this.isLoading = false;
@@ -65,7 +66,6 @@ export class StartseitePage {
       });
     } else {
       this.arrivalAirports = [];
-      this.errorMessage = '';
     }
   }
 
@@ -81,17 +81,31 @@ export class StartseitePage {
     this.arrivalAirports = [];
   }
 
+  navigateToFlightSearch(): void {
+    if (!this.selectedDeparture || !this.departureDate) {
+      this.errorMessage = 'Bitte geben Sie Abflughafen und Datum an';
+      return;
+    }
+
+    this.router.navigate(['/footer/flugsuche'], {
+      state: {
+        selectedDeparture: this.selectedDeparture,
+        departureDate: this.departureDate,
+        selectedArrival: this.selectedArrival,
+        returnDate: this.returnDate,
+        passengers: this.passengers
+      }
+    });
+  }
+
   swapAirports(): void {
     const temp = this.selectedDeparture;
     this.selectedDeparture = this.selectedArrival;
     this.selectedArrival = temp;
 
-    if (this.selectedDeparture) {
-      this.departureQuery = `${this.selectedDeparture.name} (${this.selectedDeparture.iata})`;
-    }
-    if (this.selectedArrival) {
-      this.arrivalQuery = `${this.selectedArrival.name} (${this.selectedArrival.iata})`;
-    }
+    const tempQuery = this.departureQuery;
+    this.departureQuery = this.arrivalQuery;
+    this.arrivalQuery = tempQuery;
   }
 
   clearDeparture(): void {
@@ -130,15 +144,12 @@ export class StartseitePage {
     }
   }
 
-  setDepartureDate(event: any): void {
-    this.departureDate = event.target.value;
-  }
-
-  setReturnDate(event: any): void {
-    this.returnDate = event.target.value;
-  }
-
-  navigateToFlightSearch(): void {
-    this.navCtrl.navigateForward('/flugsuche');
+  onDateChange(event: CustomEvent, type: 'departure' | 'return'): void {
+    const value = event.detail.value as string;
+    if (type === 'departure') {
+      this.departureDate = value || '';
+    } else {
+      this.returnDate = value || '';
+    }
   }
 }
