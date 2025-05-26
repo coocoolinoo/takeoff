@@ -4,22 +4,21 @@ import { IonicModule, NavController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FooterPage } from '../footer/footer.page';
-import { RouterLink, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-startseite',
   templateUrl: './startseite.page.html',
   styleUrls: ['./startseite.page.scss'],
   standalone: true,
-  imports: [IonicModule, FormsModule, CommonModule, FooterPage, RouterLink]
+  imports: [IonicModule, FormsModule, CommonModule, FooterPage]
 })
 export class StartseitePage {
   departureQuery = '';
   arrivalQuery = '';
-  departureDate: string = '';
-  returnDate: string = '';
+  departureDate = '';
+  returnDate = '';
   passengers = 1;
-
   departureAirports: any[] = [];
   arrivalAirports: any[] = [];
   selectedDeparture: { name: string, iata: string } | null = null;
@@ -37,8 +36,8 @@ export class StartseitePage {
     if (term.trim().length > 1 && !this.selectedDeparture) {
       this.isLoading = true;
       this.airportService.searchAirports(term).subscribe({
-        next: (airports) => {
-          this.departureAirports = airports.items || [];
+        next: (response) => {
+          this.departureAirports = response.items || [];
           this.isLoading = false;
         },
         error: () => {
@@ -55,8 +54,8 @@ export class StartseitePage {
     if (term.trim().length > 1 && !this.selectedArrival) {
       this.isLoading = true;
       this.airportService.searchAirports(term).subscribe({
-        next: (airports) => {
-          this.arrivalAirports = airports.items || [];
+        next: (response) => {
+          this.arrivalAirports = response.items || [];
           this.isLoading = false;
         },
         error: () => {
@@ -102,7 +101,6 @@ export class StartseitePage {
     const temp = this.selectedDeparture;
     this.selectedDeparture = this.selectedArrival;
     this.selectedArrival = temp;
-
     const tempQuery = this.departureQuery;
     this.departureQuery = this.arrivalQuery;
     this.arrivalQuery = tempQuery;

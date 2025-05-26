@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -7,17 +7,19 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AerodataboxService {
-  private readonly searchUrl = 'https://aerodatabox.p.rapidapi.com/airports/search/term';
+  private readonly apiUrl = 'https://aerodatabox.p.rapidapi.com';
+  private readonly searchUrl = `${this.apiUrl}/airports/search/term`;
 
   constructor(private http: HttpClient) {}
 
-  searchAirports(query: string): Observable<any> {
-    if (!query || query.length < 3) return of([]);
+  searchAirports(term: string): Observable<any> {
+    if (!term || term.length < 3) return of([]);
 
-    const params = new HttpParams()
-      .set('q', query)
-      .set('limit', '5')
-      .set('withFlightInfoOnly', 'true');
+    const params = {
+      q: term,
+      limit: '5',
+      withFlightInfoOnly: 'true'
+    };
 
     return this.http.get(this.searchUrl, {
       headers: {
@@ -26,20 +28,30 @@ export class AerodataboxService {
       },
       params
     }).pipe(
-      catchError(() => of([]))
-    );
+      catchError(() => of({ items: [] })))
   }
 
-  getFlightsFromAirport(iataCode: string, date: string): Observable<any> {
-    const url = `https://aerodatabox.p.rapidapi.com/flights/airports/icao/${iataCode}/${date}T00:00/${date}T23:59`;
+  getFlightsBetweenAirports(fromIata: string, toIata: string, date: string): Observable<any> {
+    const formattedDate = date.split('T')[0];
+    const url = `${this.apiUrl}/flights/airports/iata/${fromIata}/${toIata}/${formattedDate}`;
 
     return this.http.get(url, {
       headers: {
         'X-RapidAPI-Key': 'dd83395831msh3c5c21df7e6a51ep1c5847jsn2ec550d55641',
         'X-RapidAPI-Host': 'aerodatabox.p.rapidapi.com'
+      },
+      params: {
+        withLeg: 'true',
+        direction: 'Departure',
+        withCancelled: 'false',
+        withCodeshared: 'true',
+        withCargo: 'false'
       }
     }).pipe(
-      catchError(() => of({ departures: [] }))
+      catchError(error => {
+        console.error('API Error:', error);
+        return of({ departures: [] });
+      })
     );
   }
 }

@@ -1,10 +1,9 @@
+/* flugsuche.page.scss */
 .map-container {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 300px;
-  z-index: 1;
+  height: 200px;
+  position: relative;
+  z-index: 2;
   overflow: hidden;
 }
 
@@ -16,10 +15,10 @@
 
 .background-container {
   position: absolute;
-  top: 300px;
+  top: 200px;
   left: 0;
   width: 100%;
-  height: calc(100% - 300px);
+  height: calc(100% - 200px);
   z-index: 0;
 }
 
@@ -29,13 +28,18 @@
   object-fit: cover;
 }
 
-.flight-card {
-  position: absolute;
-  top: 250px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  width: 90%;
-  max-width: 430px;
-  z-index: 2;
+.flight-info {
+  position: relative;
+  z-index: 3;
+  padding: 1rem;
 }
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+ion-content {
+  --background: transparent;
+}
+
