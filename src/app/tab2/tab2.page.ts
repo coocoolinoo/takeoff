@@ -10,9 +10,17 @@ import { addIcons } from 'ionicons';
 import {
   airplane, personCircleOutline, peopleCircleOutline, mailOpenOutline,
   lockClosedOutline, rocketOutline, exitOutline, searchOutline,
-  homeOutline, chevronBackOutline
+  homeOutline, chevronBackOutline, addOutline, removeOutline
 } from 'ionicons/icons';
 import { Router } from '@angular/router';
+
+interface Passenger {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  ticketNumber?: number;
+}
 
 @Component({
   selector: 'app-tab2',
@@ -27,12 +35,12 @@ import { Router } from '@angular/router';
   ]
 })
 export class Tab2Page {
-  user = {
+  passengers: Passenger[] = [{
     firstName: '',
     lastName: '',
     email: '',
     password: ''
-  };
+  }];
 
   isRegistered = false;
   showError = false;
@@ -43,34 +51,64 @@ export class Tab2Page {
     addIcons({
       airplane, personCircleOutline, peopleCircleOutline, mailOpenOutline,
       lockClosedOutline, rocketOutline, exitOutline, searchOutline,
-      homeOutline, chevronBackOutline
+      homeOutline, chevronBackOutline, addOutline, removeOutline
     });
     this.checkRegistration();
   }
 
   checkRegistration() {
-    const userData = localStorage.getItem('currentUser');
-    if (userData) {
-      this.user = JSON.parse(userData);
+    const passengersData = localStorage.getItem('passengers');
+    if (passengersData) {
+      this.passengers = JSON.parse(passengersData);
       this.isRegistered = true;
     }
   }
 
+  addPassenger() {
+    this.passengers.push({
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: ''
+    });
+  }
+
+  removePassenger(index: number) {
+    if (this.passengers.length > 1) {
+      this.passengers.splice(index, 1);
+    }
+  }
+
   registerUser() {
-    if (!this.user.firstName || !this.user.lastName || !this.user.email || !this.user.password) {
+    // Validate all passengers
+    const invalidPassenger = this.passengers.find(p => 
+      !p.firstName || !p.lastName || !p.email || !p.password
+    );
+
+    if (invalidPassenger) {
       this.showError = true;
       return;
     }
 
-    localStorage.setItem('currentUser', JSON.stringify(this.user));
+    // Generate ticket numbers for all passengers
+    this.passengers = this.passengers.map(p => ({
+      ...p,
+      ticketNumber: Math.floor(Math.random() * 900000) + 100000
+    }));
+
+    localStorage.setItem('passengers', JSON.stringify(this.passengers));
     this.isRegistered = true;
-    this.randomTicket = Math.floor(Math.random() * 900000);
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem('passengers');
     this.isRegistered = false;
-    this.user = { firstName: '', lastName: '', email: '', password: '' };
+    this.passengers = [{
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: ''
+    }];
   }
 
   navigateToStartseite() {

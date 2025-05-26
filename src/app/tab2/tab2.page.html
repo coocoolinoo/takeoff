@@ -26,29 +26,43 @@
 
       <ion-card-content>
         <form (ngSubmit)="registerUser()" #registrationForm="ngForm" class="auth-form">
-          <ion-item lines="none" class="form-item floating-item">
-            <ion-icon name="person-circle-outline" slot="start" class="input-icon"></ion-icon>
-            <ion-label position="floating">First Name</ion-label>
-            <ion-input type="text" [(ngModel)]="user.firstName" name="firstName" required></ion-input>
-          </ion-item>
+          <div *ngFor="let passenger of passengers; let i = index" class="passenger-form">
+            <div class="passenger-header">
+              <h3>Passenger {{i + 1}}</h3>
+              <ion-button fill="clear" (click)="removePassenger(i)" *ngIf="passengers.length > 1">
+                <ion-icon name="remove-outline"></ion-icon>
+              </ion-button>
+            </div>
 
-          <ion-item lines="none" class="form-item floating-item">
-            <ion-icon name="people-circle-outline" slot="start" class="input-icon"></ion-icon>
-            <ion-label position="floating">Last Name</ion-label>
-            <ion-input type="text" [(ngModel)]="user.lastName" name="lastName" required></ion-input>
-          </ion-item>
+            <ion-item lines="none" class="form-item floating-item">
+              <ion-icon name="person-circle-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-label position="floating">First Name</ion-label>
+              <ion-input type="text" [(ngModel)]="passenger.firstName" [name]="'firstName' + i" required></ion-input>
+            </ion-item>
 
-          <ion-item lines="none" class="form-item floating-item">
-            <ion-icon name="mail-open-outline" slot="start" class="input-icon"></ion-icon>
-            <ion-label position="floating">Email</ion-label>
-            <ion-input type="email" [(ngModel)]="user.email" name="email" required></ion-input>
-          </ion-item>
+            <ion-item lines="none" class="form-item floating-item">
+              <ion-icon name="people-circle-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-label position="floating">Last Name</ion-label>
+              <ion-input type="text" [(ngModel)]="passenger.lastName" [name]="'lastName' + i" required></ion-input>
+            </ion-item>
 
-          <ion-item lines="none" class="form-item floating-item">
-            <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
-            <ion-label position="floating">Password</ion-label>
-            <ion-input type="password" [(ngModel)]="user.password" name="password" required></ion-input>
-          </ion-item>
+            <ion-item lines="none" class="form-item floating-item">
+              <ion-icon name="mail-open-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-label position="floating">Email</ion-label>
+              <ion-input type="email" [(ngModel)]="passenger.email" [name]="'email' + i" required></ion-input>
+            </ion-item>
+
+            <ion-item lines="none" class="form-item floating-item">
+              <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-label position="floating">Password</ion-label>
+              <ion-input type="password" [(ngModel)]="passenger.password" [name]="'password' + i" required></ion-input>
+            </ion-item>
+          </div>
+
+          <ion-button expand="block" fill="clear" (click)="addPassenger()" class="add-passenger-btn">
+            <ion-icon name="add-outline" slot="start"></ion-icon>
+            Add Passenger
+          </ion-button>
 
           <ion-button expand="block" type="submit" shape="round" class="submit-btn" [disabled]="!registrationForm.valid">
             <ion-icon name="rocket-outline" slot="start"></ion-icon>
@@ -72,19 +86,21 @@
       </div>
 
       <ion-card-header>
-        <ion-card-title class="welcome-title">Welcome Aboard,<br>{{ user.firstName }}!</ion-card-title>
+        <ion-card-title class="welcome-title">Welcome Aboard,<br>{{ passengers[0].firstName }}!</ion-card-title>
       </ion-card-header>
 
       <ion-card-content>
-        <p class="welcome-text">Your boarding pass is ready</p>
-        <div class="boarding-pass">
-          <div class="pass-detail">
-            <span>Passenger</span>
-            <strong>{{ user.firstName }} {{ user.lastName }}</strong>
-          </div>
-          <div class="pass-detail">
-            <span>Ticket Number</span>
-            <strong>TK{{ 100000 + randomTicket }}</strong>
+        <p class="welcome-text">Your boarding passes are ready</p>
+        <div class="boarding-passes">
+          <div class="boarding-pass" *ngFor="let passenger of passengers">
+            <div class="pass-detail">
+              <span>Passenger</span>
+              <strong>{{ passenger.firstName }} {{ passenger.lastName }}</strong>
+            </div>
+            <div class="pass-detail">
+              <span>Ticket Number</span>
+              <strong>TK{{ passenger.ticketNumber }}</strong>
+            </div>
           </div>
         </div>
 

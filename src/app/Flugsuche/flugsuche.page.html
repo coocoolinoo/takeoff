@@ -32,6 +32,22 @@
       </ion-card-header>
     </ion-card>
 
+    <ion-card *ngIf="registeredPassengers.length > 0" class="passengers-card">
+      <ion-card-header>
+        <ion-card-title>Registrierte Passagiere</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let passenger of registeredPassengers">
+            <ion-label>
+              <h2>{{passenger.firstName}} {{passenger.lastName}}</h2>
+              <p>Ticket: TK{{passenger.ticketNumber}}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
     <ion-list *ngIf="flights.length > 0">
       <ion-list-header>
         <ion-label>Hinflüge</ion-label>

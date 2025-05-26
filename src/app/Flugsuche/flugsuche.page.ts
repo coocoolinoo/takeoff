@@ -12,6 +12,13 @@ interface Flight {
   arrival?: { airport?: { iata: string; name: string } };
 }
 
+interface Passenger {
+  firstName: string;
+  lastName: string;
+  email: string;
+  ticketNumber?: number;
+}
+
 @Component({
   selector: 'app-flugsuche',
   templateUrl: './flugsuche.page.html',
@@ -29,6 +36,7 @@ export class FlugsuchePage {
   returnFlights: Flight[] = [];
   isLoading = false;
   errorMessage = '';
+  registeredPassengers: Passenger[] = [];
 
   constructor(
     private router: Router,
@@ -41,7 +49,15 @@ export class FlugsuchePage {
       this.selectedArrival = navigation.extras.state['selectedArrival'];
       this.returnDate = navigation.extras.state['returnDate'];
       this.passengers = navigation.extras.state['passengers'];
+      this.loadPassengers();
       this.loadFlights();
+    }
+  }
+
+  loadPassengers() {
+    const passengersData = localStorage.getItem('passengers');
+    if (passengersData) {
+      this.registeredPassengers = JSON.parse(passengersData);
     }
   }
 

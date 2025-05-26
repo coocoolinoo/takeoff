@@ -317,3 +317,91 @@
     opacity: 0;
   }
 }
+
+.passenger-form {
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+.passenger-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.1em;
+    font-weight: 500;
+  }
+
+  ion-button {
+    --color: #ff8a00;
+    --background-hover: rgba(255, 138, 0, 0.1);
+  }
+}
+
+.add-passenger-btn {
+  margin: 10px 0 20px;
+  --color: #fff;
+  --background: rgba(255, 255, 255, 0.1);
+  --background-hover: rgba(255, 255, 255, 0.2);
+  --border-radius: 12px;
+  height: 45px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+
+  ion-icon {
+    font-size: 20px;
+    margin-right: 8px;
+  }
+
+  &:hover {
+    --background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+  }
+}
+
+.boarding-passes {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.boarding-pass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+
+  .pass-detail {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+
+    span {
+      color: var(--ion-color-medium);
+      font-size: 0.9em;
+    }
+
+    strong {
+      color: var(--ion-color-light);
+    }
+  }
+}
