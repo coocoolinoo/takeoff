@@ -51,22 +51,21 @@ export class AerodataboxService {
   }
 
   getFlightsBetweenAirports(fromIata: string, toIata: string, date: string): Observable<any> {
-    const formattedDate = date.split('T')[0];
-    const url = `${this.apiUrl}/flights/airports/iata/${fromIata}/${toIata}/${formattedDate}`;
-
+    // Aerodatabox erwartet Zeitfenster im Format YYYY-MM-DDTHH:mm
+    const from = `${date}T00:00`;
+    const to = `${date}T23:59`;
+    const url = `${this.apiUrl}/flights/airport/iata/${fromIata}/${from}/${to}`;
     return this.http.get(url, {
       headers: {
         'X-RapidAPI-Key': 'dd83395831msh3c5c21df7e6a51ep1c5847jsn2ec550d55641',
         'X-RapidAPI-Host': 'aerodatabox.p.rapidapi.com'
-      },
-      params: {
-        withLeg: 'true',
-        direction: 'Departure',
-        withCancelled: 'false',
-        withCodeshared: 'true',
-        withCargo: 'false'
       }
     }).pipe(
+      map((response: any) => ({
+        departures: (response.departures || []).filter(
+          (flight: any) => flight.arrival?.airport?.iata === toIata
+        )
+      })),
       catchError(error => {
         console.error('API Error:', error);
         return of({ departures: [] });

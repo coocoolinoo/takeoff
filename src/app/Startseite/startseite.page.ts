@@ -21,8 +21,8 @@ export class StartseitePage {
   passengers = 1;
   departureAirports: any[] = [];
   arrivalAirports: any[] = [];
-  selectedDeparture: { name: string, iata: string, countryCode: string } | null = null;
-  selectedArrival: { name: string, iata: string, countryCode: string } | null = null;
+  selectedDeparture: { name: string, iata: string, countryCode: string, lat?: number, lng?: number } | null = null;
+  selectedArrival: { name: string, iata: string, countryCode: string, lat?: number, lng?: number } | null = null;
   isLoading = false;
   errorMessage = '';
 
@@ -72,7 +72,9 @@ export class StartseitePage {
     this.selectedDeparture = {
       name: airport.name,
       iata: airport.iata,
-      countryCode: airport.countryCode
+      countryCode: airport.countryCode,
+      lat: airport.location?.lat,
+      lng: airport.location?.lon
     };
     this.departureQuery = airport.name;
     this.departureAirports = [];
@@ -82,7 +84,9 @@ export class StartseitePage {
     this.selectedArrival = {
       name: airport.name,
       iata: airport.iata,
-      countryCode: airport.countryCode
+      countryCode: airport.countryCode,
+      lat: airport.location?.lat,
+      lng: airport.location?.lon
     };
     this.arrivalQuery = airport.name;
     this.arrivalAirports = [];
