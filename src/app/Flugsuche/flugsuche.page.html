@@ -32,6 +32,46 @@
       </ion-card-header>
     </ion-card>
 
+    <ion-accordion-group *ngIf="countryInfo">
+      <ion-accordion value="countryInfo">
+        <ion-item slot="header" color="light">
+          <ion-label>
+            <h2>Reiseinformationen für {{countryInfo.name}}</h2>
+            <p>{{countryInfo.capital}} | {{countryInfo.region}}</p>
+          </ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content">
+          <ion-list>
+            <ion-item>
+              <ion-label>
+                <h2>Visum</h2>
+                <p>{{countryInfo.travelRequirements.visa.type}}</p>
+                <p>Gültigkeitsdauer: {{countryInfo.travelRequirements.visa.duration}}</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>
+                <h2>Benötigte Impfungen</h2>
+                <p *ngFor="let vaccine of countryInfo.travelRequirements.vaccinations">
+                  • {{vaccine}}
+                </p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>
+                <h2>Benötigte Dokumente</h2>
+                <p *ngFor="let doc of countryInfo.travelRequirements.documents">
+                  • {{doc}}
+                </p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
+
     <ion-card *ngIf="registeredPassengers.length > 0" class="passengers-card">
       <ion-card-header>
         <ion-card-title>Registrierte Passagiere</ion-card-title>
@@ -42,6 +82,17 @@
             <ion-label>
               <h2>{{passenger.firstName}} {{passenger.lastName}}</h2>
               <p>Ticket: TK{{passenger.ticketNumber}}</p>
+              <ng-container *ngIf="getEntryStatusForPassenger(passenger) as entryStatus">
+                <p [ngStyle]="{
+                  color: entryStatus.allowed ? 'green' : 'red',
+                  fontWeight: 'bold',
+                  margin: '0.5em 0 0 0'
+                }">
+                  <ion-icon [name]="entryStatus.allowed ? 'checkmark-circle' : 'close-circle'" style="vertical-align: middle;"></ion-icon>
+                  {{ entryStatus.allowed ? 'Einreise erlaubt' : 'Einreise nicht erlaubt' }}
+                  <span style="font-weight: normal; color: #888;">({{entryStatus.reason}})</span>
+                </p>
+              </ng-container>
             </ion-label>
           </ion-item>
         </ion-list>

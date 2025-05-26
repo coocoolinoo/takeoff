@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardContent,
   IonCardHeader, IonCardSubtitle, IonCardTitle, IonItem, IonLabel,
-  IonInput, IonButton, IonToast, IonIcon, IonButtons, IonBackButton
+  IonInput, IonButton, IonToast, IonIcon, IonButtons, IonBackButton,
+  IonSelect, IonSelectOption
 } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -13,12 +14,15 @@ import {
   homeOutline, chevronBackOutline, addOutline, removeOutline
 } from 'ionicons/icons';
 import { Router } from '@angular/router';
+import { CountryinfoService } from '../countryinfo.service';
 
 interface Passenger {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
+  nationality?: string;
+  passportNumber?: string;
   ticketNumber?: number;
 }
 
@@ -31,7 +35,8 @@ interface Passenger {
     IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardContent,
     IonCardHeader, IonCardSubtitle, IonCardTitle, IonItem, IonLabel,
     IonInput, IonButton, IonIcon, IonButtons, IonBackButton,
-    FormsModule, CommonModule
+    FormsModule, CommonModule,
+    IonSelect, IonSelectOption
   ]
 })
 export class Tab2Page {
@@ -39,21 +44,28 @@ export class Tab2Page {
     firstName: '',
     lastName: '',
     email: '',
-    password: ''
+    password: '',
+    nationality: '',
+    passportNumber: ''
   }];
 
   isRegistered = false;
   showError = false;
   confetti = Array(50).fill(0);
   randomTicket = Math.floor(Math.random() * 900000);
+  countries: { name: string; code: string }[] = [];
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private countryInfoService: CountryinfoService
+  ) {
     addIcons({
       airplane, personCircleOutline, peopleCircleOutline, mailOpenOutline,
       lockClosedOutline, rocketOutline, exitOutline, searchOutline,
       homeOutline, chevronBackOutline, addOutline, removeOutline
     });
     this.checkRegistration();
+    this.loadCountries();
   }
 
   checkRegistration() {
@@ -69,7 +81,9 @@ export class Tab2Page {
       firstName: '',
       lastName: '',
       email: '',
-      password: ''
+      password: '',
+      nationality: '',
+      passportNumber: ''
     });
   }
 
@@ -107,11 +121,22 @@ export class Tab2Page {
       firstName: '',
       lastName: '',
       email: '',
-      password: ''
+      password: '',
+      nationality: '',
+      passportNumber: ''
     }];
   }
 
   navigateToStartseite() {
     this.router.navigate(['/footer/startseite'], { replaceUrl: true });
+  }
+
+  loadCountries() {
+    this.countryInfoService.searchCountry('').subscribe((countries: any[]) => {
+      this.countries = countries.map(country => ({
+        name: country.name.common,
+        code: country.cca2
+      })).sort((a, b) => a.name.localeCompare(b.name));
+    });
   }
 }

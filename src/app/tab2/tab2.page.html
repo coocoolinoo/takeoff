@@ -57,6 +57,22 @@
               <ion-label position="floating">Password</ion-label>
               <ion-input type="password" [(ngModel)]="passenger.password" [name]="'password' + i" required></ion-input>
             </ion-item>
+
+            <ion-item lines="none" class="form-item floating-item">
+              <ion-icon name="globe-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-label position="floating">Staatsbürgerschaft</ion-label>
+              <ion-select [(ngModel)]="passenger.nationality" [name]="'nationality' + i" required>
+                <ion-select-option *ngFor="let country of countries" [value]="country.code">
+                  {{country.name}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item lines="none" class="form-item floating-item">
+              <ion-icon name="card-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-label position="floating">Reisepassnummer</ion-label>
+              <ion-input type="text" [(ngModel)]="passenger.passportNumber" [name]="'passportNumber' + i" required></ion-input>
+            </ion-item>
           </div>
 
           <ion-button expand="block" fill="clear" (click)="addPassenger()" class="add-passenger-btn">

@@ -405,3 +405,25 @@
     }
   }
 }
+
+.form-item {
+  --background: transparent;
+  --border-color: rgba(255, 255, 255, 0.2);
+  --highlight-color: var(--ion-color-primary);
+  margin-bottom: 1rem;
+
+  ion-select {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+  }
+
+  ion-select::part(icon) {
+    opacity: 0.5;
+  }
+
+  ion-select::part(placeholder),
+  ion-select::part(text) {
+    color: var(--ion-color-light);
+  }
+}

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AerodataboxService } from '../aerodatabox.service';
 import { lastValueFrom } from 'rxjs';
+import {CountryinfoService} from "../countryinfo.service";
 
 interface Flight {
   number: string;
@@ -17,6 +18,21 @@ interface Passenger {
   lastName: string;
   email: string;
   ticketNumber?: number;
+}
+
+interface CountryInfo {
+  name: string;
+  capital: string;
+  region: string;
+  population: number;
+  travelRequirements: {
+    visa: {
+      type: string;
+      duration: string;
+    };
+    vaccinations: string[];
+    documents: string[];
+  };
 }
 
 @Component({
@@ -37,10 +53,12 @@ export class FlugsuchePage {
   isLoading = false;
   errorMessage = '';
   registeredPassengers: Passenger[] = [];
+  countryInfo: CountryInfo | null = null;
 
   constructor(
     private router: Router,
-    private aeroService: AerodataboxService
+    private aeroService: AerodataboxService,
+    private countryInfoService: CountryinfoService
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
@@ -51,6 +69,7 @@ export class FlugsuchePage {
       this.passengers = navigation.extras.state['passengers'];
       this.loadPassengers();
       this.loadFlights();
+      this.loadCountryInfo();
     }
   }
 
@@ -58,6 +77,19 @@ export class FlugsuchePage {
     const passengersData = localStorage.getItem('passengers');
     if (passengersData) {
       this.registeredPassengers = JSON.parse(passengersData);
+    }
+  }
+
+  async loadCountryInfo() {
+    if (this.selectedArrival?.countryCode) {
+      try {
+        const countryInfo = await lastValueFrom(
+          this.aeroService.getCountryInfo(this.selectedArrival.countryCode)
+        );
+        this.countryInfo = countryInfo;
+      } catch (error) {
+        console.error('Error loading country info:', error);
+      }
     }
   }
 
@@ -98,5 +130,10 @@ export class FlugsuchePage {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  getEntryStatusForPassenger(passenger: any): { allowed: boolean, reason: string } | null {
+    if (!passenger.nationality || !this.selectedArrival?.countryCode) return null;
+    return this.aeroService.canEnterCountry(passenger.nationality, this.selectedArrival.countryCode);
   }
 }
