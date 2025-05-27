@@ -28,6 +28,30 @@ export class AerodataboxService {
   private readonly searchUrl = `${this.apiUrl}/airports/search/term`;
   private readonly countryInfoUrl = 'https://restcountries.com/v3.1/alpha';
   private readonly allCountriesUrl = 'https://restcountries.com/v3.1/all';
+  private apiKey = 'aero_8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c';
+  
+  // EU-Länder
+  private euCountries = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE'];
+  
+  // Schengen-Länder (inkl. Nicht-EU)
+  private schengenCountries = [...this.euCountries, 'IS', 'LI', 'NO', 'CH'];
+  
+  // Länder mit speziellen Visa-Anforderungen
+  private visaRequiredCountries: { [key: string]: VisaRequirement } = {
+    'US': { type: 'ESTA oder Visum', duration: '90 Tage' },
+    'CA': { type: 'eTA oder Visum', duration: '6 Monate' },
+    'AU': { type: 'ETA oder Visum', duration: '3 Monate' },
+    'NZ': { type: 'NZeTA oder Visum', duration: '3 Monate' },
+    'JP': { type: 'Visum', duration: '90 Tage' },
+    'KR': { type: 'K-ETA oder Visum', duration: '90 Tage' },
+    'CN': { type: 'Visum', duration: '30 Tage' },
+    'IN': { type: 'e-Visum', duration: '60 Tage' },
+    'RU': { type: 'Visum', duration: '30 Tage' },
+    'BR': { type: 'e-Visum', duration: '90 Tage' }
+  };
+
+  // Länder mit speziellen Einreisebeschränkungen
+  private restrictedCountries = ['KP', 'IR', 'SY', 'CU', 'VE'];
 
   constructor(private http: HttpClient) {}
 
@@ -109,53 +133,95 @@ export class AerodataboxService {
     );
   }
 
-  private getVisaRequirements(countryCode: string): VisaRequirement {
-    const visaRequirements: CountryRequirements = {
-      'US': { type: 'ESTA', duration: '90 days' },
-      'GB': { type: 'No visa required', duration: '90 days' },
-      'DE': { type: 'No visa required', duration: '90 days' },
-      // Add more countries as needed
+  canEnterCountry(nationality: string, destinationCountry: string): { allowed: boolean; reason: string } {
+    // Prüfe auf Heimatland
+    if (nationality === destinationCountry) {
+      return {
+        allowed: true,
+        reason: 'Einreise erlaubt (Heimatland)'
+      };
+    }
+
+    // Prüfe auf Einreisebeschränkungen
+    if (this.restrictedCountries.includes(destinationCountry)) {
+      return {
+        allowed: false,
+        reason: 'Einreise derzeit nicht möglich (Reisebeschränkungen)'
+      };
+    }
+
+    // EU-Bürger in EU-Ländern
+    if (this.euCountries.includes(destinationCountry) && this.euCountries.includes(nationality)) {
+      return {
+        allowed: true,
+        reason: 'Einreise erlaubt (EU-Bürger)'
+      };
+    }
+
+    // Schengen-Bürger in Schengen-Ländern
+    if (this.schengenCountries.includes(destinationCountry) && this.schengenCountries.includes(nationality)) {
+      return {
+        allowed: true,
+        reason: 'Einreise erlaubt (Schengen-Raum)'
+      };
+    }
+
+    // Spezielle Visa-Anforderungen
+    if (this.visaRequiredCountries[destinationCountry]) {
+      const visaInfo = this.visaRequiredCountries[destinationCountry];
+      return {
+        allowed: true,
+        reason: `${visaInfo.type} erforderlich (${visaInfo.duration})`
+      };
+    }
+
+    // Standardfall für andere Länder
+    return {
+      allowed: true,
+      reason: 'Einreise erlaubt (Standard)'
     };
-    return visaRequirements[countryCode] || { type: 'Check with embassy', duration: 'Unknown' };
+  }
+
+  private getVisaRequirements(countryCode: string): VisaRequirement {
+    if (this.euCountries.includes(countryCode)) {
+      return { type: 'Kein Visum für EU-Bürger', duration: 'Unbegrenzt' };
+    }
+    if (this.visaRequiredCountries[countryCode]) {
+      return this.visaRequiredCountries[countryCode];
+    }
+    return { type: 'Bitte informieren Sie sich bei der Botschaft', duration: 'Unbekannt' };
   }
 
   private getVaccinationRequirements(countryCode: string): string[] {
-    const vaccinationRequirements: VaccinationRequirements = {
-      'US': ['COVID-19', 'Yellow Fever'],
-      'GB': ['COVID-19'],
-      'DE': ['COVID-19'],
-      // Add more countries as needed
-    };
-    return vaccinationRequirements[countryCode] || ['COVID-19'];
+    const baseVaccinations = ['COVID-19 (empfohlen)', 'Tetanus (empfohlen)'];
+    
+    // Spezielle Impfanforderungen für bestimmte Regionen
+    if (['BR', 'CO', 'PE', 'EC', 'BO'].includes(countryCode)) {
+      return [...baseVaccinations, 'Gelbfieber (empfohlen)'];
+    }
+    if (['NG', 'GH', 'KE', 'TZ', 'UG'].includes(countryCode)) {
+      return [...baseVaccinations, 'Gelbfieber (erforderlich)', 'Malaria-Prophylaxe (empfohlen)'];
+    }
+    if (['IN', 'NP', 'BD', 'LK'].includes(countryCode)) {
+      return [...baseVaccinations, 'Hepatitis A (empfohlen)', 'Typhus (empfohlen)'];
+    }
+
+    return baseVaccinations;
   }
 
   private getRequiredDocuments(countryCode: string): string[] {
-    const documentRequirements: DocumentRequirements = {
-      'US': ['Valid Passport', 'ESTA Application', 'Return Ticket'],
-      'GB': ['Valid Passport', 'Return Ticket'],
-      'DE': ['Valid Passport', 'Return Ticket'],
-      // Add more countries as needed
-    };
-    return documentRequirements[countryCode] || ['Valid Passport', 'Return Ticket'];
-  }
+    const baseDocuments = ['Gültiger Reisepass'];
+    
+    if (this.euCountries.includes(countryCode)) {
+      return ['Gültiger Reisepass oder Personalausweis'];
+    }
+    if (this.visaRequiredCountries[countryCode]) {
+      return [...baseDocuments, 'Rückflugticket', 'Unterkunftsnachweis'];
+    }
+    if (this.schengenCountries.includes(countryCode)) {
+      return [...baseDocuments, 'Rückflugticket', 'Reisekrankenversicherung'];
+    }
 
-  /**
-   * Mock-Logik: Prüft, ob ein Passagier mit gegebener Nationalität ins Zielland einreisen darf.
-   * Rückgabe: { allowed: boolean, reason: string }
-   */
-  canEnterCountry(passengerNationality: string, destinationCountryCode: string): { allowed: boolean, reason: string } {
-    // Beispiel-Logik: DE, US, GB dürfen jeweils in die anderen Länder visafrei einreisen
-    const visaFreeMatrix: { [key: string]: string[] } = {
-      'DE': ['US', 'GB', 'DE'],
-      'US': ['DE', 'GB', 'US'],
-      'GB': ['DE', 'US', 'GB']
-    };
-    if (visaFreeMatrix[passengerNationality] && visaFreeMatrix[passengerNationality].includes(destinationCountryCode)) {
-      return { allowed: true, reason: 'Visumfrei' };
-    }
-    if (passengerNationality === destinationCountryCode) {
-      return { allowed: true, reason: 'Heimatland' };
-    }
-    return { allowed: false, reason: 'Visum oder Einreise nicht erlaubt (Mock)' };
+    return [...baseDocuments, 'Rückflugticket'];
   }
 }
