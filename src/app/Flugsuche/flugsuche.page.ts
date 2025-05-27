@@ -4,20 +4,34 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AerodataboxService } from '../aerodatabox.service';
 import { lastValueFrom } from 'rxjs';
-import {CountryinfoService} from "../countryinfo.service";
+import { CountryinfoService } from "../countryinfo.service";
 
 interface Flight {
   number: string;
-  airline?: { name: string };
-  departure: { scheduledTime: string; airport?: { iata: string } };
-  arrival?: { airport?: { iata: string; name: string } };
+  airline: {
+    name: string;
+  };
+  departure: {
+    airport: {
+      name: string;
+      iata: string;
+    };
+    scheduledTimeLocal: string;
+  };
+  arrival: {
+    airport: {
+      name: string;
+      iata: string;
+    };
+    scheduledTimeLocal: string;
+  };
 }
 
 interface Passenger {
   firstName: string;
   lastName: string;
-  email: string;
-  ticketNumber?: number;
+  nationality: string;
+  passportNumber: string;
 }
 
 interface CountryInfo {
@@ -131,7 +145,7 @@ export class FlugsuchePage implements AfterViewInit {
 
       const [departures, returns] = await Promise.all([departurePromise, returnPromise]);
 
-      this.debugApiResponse = departures; // Debug: Rohdaten speichern
+      this.debugApiResponse = departures;
       console.log('API-Response (Hinflüge):', departures);
 
       this.flights = departures?.departures || [];
@@ -152,5 +166,17 @@ export class FlugsuchePage implements AfterViewInit {
   getEntryStatusForPassenger(passenger: any): { allowed: boolean, reason: string } | null {
     if (!passenger.nationality || !this.selectedArrival?.countryCode) return null;
     return this.aeroService.canEnterCountry(passenger.nationality, this.selectedArrival.countryCode);
+  }
+
+  getCountryFlag(countryCode: string): string {
+    if (!countryCode) return '';
+    
+    // Konvertiere den Ländercode in Unicode-Regionalindikator-Symbole
+    const codePoints = countryCode
+      .toUpperCase()
+      .split('')
+      .map(char => 127397 + char.charCodeAt(0));
+    
+    return String.fromCodePoint(...codePoints);
   }
 }

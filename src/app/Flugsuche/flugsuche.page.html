@@ -4,144 +4,217 @@
   </ion-toolbar>
 </ion-header>
 
-<!-- Statische OSM-Karte ganz oben -->
-<div class="map-container">
-  <iframe
-    class="map-iframe"
-    src="https://www.openstreetmap.org/export/embed.html?bbox=10.0%2C50.0%2C11.0%2C51.0&amp;layer=mapnik"
-    allowfullscreen
-    loading="lazy"
-    style="width: 100%; height: 200px; border-radius: 12px; border: none;"
-  ></iframe>
-</div>
-
 <ion-content [fullscreen]="true">
   <div class="background-container">
     <img src="./assets/Background.png" alt="Hintergrundbild" class="background-image" />
   </div>
 
-  <div class="flight-info">
-    <ion-card>
+  <div class="content-container">
+    <ion-card class="info-card">
       <ion-card-header>
         <ion-card-title>
-          {{selectedDeparture?.iata}} → {{selectedArrival?.iata}}
+          <ion-icon name="airplane-outline"></ion-icon>
+          Reiseinformationen
         </ion-card-title>
-        <ion-card-subtitle>
-          Abflug: {{departureDate | date:'dd.MM.yyyy'}}
-          <span *ngIf="returnDate">
-            | Rückflug: {{returnDate | date:'dd.MM.yyyy'}}
-          </span>
-        </ion-card-subtitle>
       </ion-card-header>
+      <ion-card-content>
+        <div class="flight-route">
+          <div class="route-point">
+            <ion-icon name="location-outline"></ion-icon>
+            <div class="route-details">
+              <h3>Von</h3>
+              <p class="airport-name">{{ selectedDeparture?.name }} ({{ selectedDeparture?.iata }})</p>
+            </div>
+          </div>
+          <div class="route-line"></div>
+          <div class="route-point">
+            <ion-icon name="location-outline"></ion-icon>
+            <div class="route-details">
+              <h3>Nach</h3>
+              <p class="airport-name">{{ selectedArrival?.name }} ({{ selectedArrival?.iata }})</p>
+            </div>
+          </div>
+        </div>
+        <div class="flight-details">
+          <ion-item lines="none">
+            <ion-icon name="calendar-outline" slot="start"></ion-icon>
+            <ion-label>
+              <h3>Abflugdatum</h3>
+              <p>✈️ {{ departureDate }}</p>
+            </ion-label>
+          </ion-item>
+          <ion-item lines="none" *ngIf="returnDate">
+            <ion-icon name="calendar-outline" slot="start"></ion-icon>
+            <ion-label>
+              <h3>Rückflugdatum</h3>
+              <p>🛬 {{ returnDate }}</p>
+            </ion-label>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-icon name="people-outline" slot="start"></ion-icon>
+            <ion-label>
+              <h3>Passagiere</h3>
+              <p>{{ passengers }}</p>
+            </ion-label>
+          </ion-item>
+        </div>
+      </ion-card-content>
     </ion-card>
 
-    <ion-accordion-group *ngIf="countryInfo">
-      <ion-accordion value="countryInfo">
-        <ion-item slot="header" color="light">
-          <ion-label>
-            <h2>Reiseinformationen für {{countryInfo.name}}</h2>
-            <p>{{countryInfo.capital}} | {{countryInfo.region}}</p>
-          </ion-label>
+    <ion-accordion-group class="custom-accordion">
+      <ion-accordion>
+        <ion-item slot="header" class="accordion-header">
+          <ion-icon name="people-circle-outline" slot="start"></ion-icon>
+          <ion-label>Registrierte Passagiere</ion-label>
+          <ion-badge slot="end" color="primary">{{ registeredPassengers.length }}</ion-badge>
         </ion-item>
-        <div class="ion-padding" slot="content">
-          <ion-list>
-            <ion-item>
-              <ion-label>
-                <h2>Visum</h2>
-                <p>{{countryInfo.travelRequirements.visa.type}}</p>
-                <p>Gültigkeitsdauer: {{countryInfo.travelRequirements.visa.duration}}</p>
-              </ion-label>
-            </ion-item>
-
-            <ion-item>
-              <ion-label>
-                <h2>Benötigte Impfungen</h2>
-                <p *ngFor="let vaccine of countryInfo.travelRequirements.vaccinations">
-                  • {{vaccine}}
+        <ion-list slot="content" class="passenger-list">
+          <ion-item *ngFor="let passenger of registeredPassengers" class="passenger-item">
+            <ion-avatar slot="start">
+              <ion-icon name="person-circle-outline" class="avatar-icon"></ion-icon>
+            </ion-avatar>
+            <ion-label>
+              <h2>{{ passenger.firstName }} {{ passenger.lastName }}</h2>
+              <p>Nationalität: <span class="flag">{{ getCountryFlag(passenger.nationality) }}</span> {{ passenger.nationality }}</p>
+              <p>Passnummer: {{ passenger.passportNumber }}</p>
+              <div *ngIf="getEntryStatusForPassenger(passenger)" class="entry-status">
+                <ion-icon [name]="getEntryStatusForPassenger(passenger)?.allowed ? 'checkmark-circle' : 'close-circle'"
+                  [color]="getEntryStatusForPassenger(passenger)?.allowed ? 'success' : 'danger'">
+                </ion-icon>
+                <p [style.color]="getEntryStatusForPassenger(passenger)?.allowed ? 'var(--ion-color-success)' : 'var(--ion-color-danger)'">
+                  {{ getEntryStatusForPassenger(passenger)?.reason }}
                 </p>
-              </ion-label>
-            </ion-item>
+              </div>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-accordion>
 
-            <ion-item>
-              <ion-label>
-                <h2>Benötigte Dokumente</h2>
-                <p *ngFor="let doc of countryInfo.travelRequirements.documents">
-                  • {{doc}}
-                </p>
-              </ion-label>
-            </ion-item>
-          </ion-list>
+      <ion-accordion *ngIf="countryInfo">
+        <ion-item slot="header" class="accordion-header">
+          <ion-icon name="globe-outline" slot="start"></ion-icon>
+          <ion-label>Länderinformationen</ion-label>
+          <ion-badge slot="end" color="secondary">{{ countryInfo.name }}</ion-badge>
+        </ion-item>
+        <div slot="content" class="country-info-content">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12" size-md="6">
+                <ion-item lines="none">
+                  <ion-icon name="business-outline" slot="start"></ion-icon>
+                  <ion-label>
+                    <h3>Hauptstadt</h3>
+                    <p>🏛️ {{ countryInfo.capital }}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+              <ion-col size="12" size-md="6">
+                <ion-item lines="none">
+                  <ion-icon name="map-outline" slot="start"></ion-icon>
+                  <ion-label>
+                    <h3>Region</h3>
+                    <p>🌍 {{ countryInfo.region }}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12" size-md="6">
+                <ion-item lines="none">
+                  <ion-icon name="people-outline" slot="start"></ion-icon>
+                  <ion-label>
+                    <h3>Einwohner</h3>
+                    <p>👥 {{ countryInfo.population | number }}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+              <ion-col size="12" size-md="6">
+                <ion-item lines="none">
+                  <ion-icon name="document-text-outline" slot="start"></ion-icon>
+                  <ion-label>
+                    <h3>Visum</h3>
+                    <p>📄 {{ countryInfo.travelRequirements.visa.type }}</p>
+                    <p class="visa-duration">⏱️ {{ countryInfo.travelRequirements.visa.duration }}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <ion-card class="requirements-card">
+            <ion-card-header>
+              <ion-card-title>Reiseanforderungen</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list lines="none">
+                <ion-item>
+                  <ion-icon name="document-text-outline" slot="start"></ion-icon>
+                  <ion-label>
+                    <h3>Benötigte Dokumente</h3>
+                    <ion-chip *ngFor="let doc of countryInfo.travelRequirements.documents" color="primary" outline>
+                      📋 {{ doc }}
+                    </ion-chip>
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-icon name="medkit-outline" slot="start"></ion-icon>
+                  <ion-label>
+                    <h3>Empfohlene Impfungen</h3>
+                    <ion-chip *ngFor="let vax of countryInfo.travelRequirements.vaccinations" color="secondary" outline>
+                      💉 {{ vax }}
+                    </ion-chip>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
         </div>
       </ion-accordion>
     </ion-accordion-group>
 
-    <ion-accordion-group *ngIf="registeredPassengers.length > 0">
-      <ion-accordion value="passengers">
-        <ion-item slot="header" color="light">
-          <ion-label>
-            <h2>Registrierte Passagiere</h2>
-          </ion-label>
-        </ion-item>
-        <div class="ion-padding" slot="content">
-          <ion-list>
-            <ion-item *ngFor="let passenger of registeredPassengers">
-              <ion-label>
-                <h2>{{passenger.firstName}} {{passenger.lastName}}</h2>
-                <p>Ticket: TK{{passenger.ticketNumber}}</p>
-                <ng-container *ngIf="getEntryStatusForPassenger(passenger) as entryStatus">
-                  <p [ngStyle]="{
-                    color: entryStatus.allowed ? 'green' : 'red',
-                    fontWeight: 'bold',
-                    margin: '0.5em 0 0 0'
-                  }">
-                    <ion-icon [name]="entryStatus.allowed ? 'checkmark-circle' : 'close-circle'" style="vertical-align: middle;"></ion-icon>
-                    {{ entryStatus.allowed ? 'Einreise erlaubt' : 'Einreise nicht erlaubt' }}
-                    <span style="font-weight: normal; color: #888;">({{entryStatus.reason}})</span>
-                  </p>
-                </ng-container>
-              </ion-label>
-            </ion-item>
-          </ion-list>
+    <ion-card class="flights-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="airplane-outline"></ion-icon>
+          Gefundene Flüge: {{ flightsCount }}
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngIf="isLoading" class="loading-container">
+          <ion-spinner name="crescent"></ion-spinner>
+          <p>Suche nach Flügen...</p>
         </div>
-      </ion-accordion>
-    </ion-accordion-group>
 
-    <ion-list *ngIf="flights.length > 0">
-      <ion-list-header>
-        <ion-label>Hinflüge</ion-label>
-      </ion-list-header>
-      <ion-item *ngFor="let flight of flights">
-        <ion-label>
-          <h2>{{flight.number}} - {{flight.airline?.name || 'Unbekannt'}}</h2>
-          <p>Abflug: {{flight.departure.scheduledTime | date:'HH:mm'}}</p>
-          <p>Ankunft: {{flight.arrival?.airport?.name || 'Unbekannt'}}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
+        <div *ngIf="errorMessage" class="error-message">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          {{ errorMessage }}
+        </div>
 
-    <ion-list *ngIf="returnFlights.length > 0">
-      <ion-list-header>
-        <ion-label>Rückflüge</ion-label>
-      </ion-list-header>
-      <ion-item *ngFor="let flight of returnFlights">
-        <ion-label>
-          <h2>{{flight.number}} - {{flight.airline?.name || 'Unbekannt'}}</h2>
-          <p>Abflug: {{flight.departure.scheduledTime | date:'HH:mm'}}</p>
-          <p>Ankunft: {{flight.arrival?.airport?.name || 'Unbekannt'}}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-
-    <div *ngIf="isLoading" class="loading-spinner">
-      <ion-spinner name="crescent"></ion-spinner>
-    </div>
-
-    <ion-text *ngIf="!isLoading && flights.length === 0" color="medium">
-      Keine Flüge gefunden
-    </ion-text>
-
-    <ion-text *ngIf="flightsCount > 0" color="success">
-      {{flightsCount}} Hinflug-Flüge gefunden
-    </ion-text>
+        <ion-list *ngIf="!isLoading && flights.length > 0" class="flight-list">
+          <ion-item *ngFor="let flight of flights" class="flight-item">
+            <ion-icon name="airplane" slot="start" class="flight-icon"></ion-icon>
+            <ion-label>
+              <h2>{{ flight.airline?.name }} {{ flight.number }}</h2>
+              <div class="flight-details">
+                <div class="flight-route">
+                  <div class="route-point">
+                    <p class="airport">{{ flight.departure?.airport?.name }} ({{ flight.departure?.airport?.iata }})</p>
+                    <p class="time">{{ flight.departure?.scheduledTimeLocal | date:'HH:mm' }}</p>
+                  </div>
+                  <div class="route-arrow">
+                    <ion-icon name="arrow-forward"></ion-icon>
+                  </div>
+                  <div class="route-point">
+                    <p class="airport">{{ flight.arrival?.airport?.name }} ({{ flight.arrival?.airport?.iata }})</p>
+                    <p class="time">{{ flight.arrival?.scheduledTimeLocal | date:'HH:mm' }}</p>
+                  </div>
+                </div>
+                <p class="date">{{ flight.departure?.scheduledTimeLocal | date:'dd.MM.yyyy' }}</p>
+              </div>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
   </div>
 </ion-content>
