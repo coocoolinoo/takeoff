@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { AerodataboxService } from '../aerodatabox.service';
 import { lastValueFrom } from 'rxjs';
 import {CountryinfoService} from "../countryinfo.service";
-import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
 interface Flight {
   number: string;
@@ -61,8 +60,7 @@ export class FlugsuchePage implements AfterViewInit {
   constructor(
     private router: Router,
     private aeroService: AerodataboxService,
-    private countryInfoService: CountryinfoService,
-    private sanitizer: DomSanitizer
+    private countryInfoService: CountryinfoService
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
@@ -154,33 +152,5 @@ export class FlugsuchePage implements AfterViewInit {
   getEntryStatusForPassenger(passenger: any): { allowed: boolean, reason: string } | null {
     if (!passenger.nationality || !this.selectedArrival?.countryCode) return null;
     return this.aeroService.canEnterCountry(passenger.nationality, this.selectedArrival.countryCode);
-  }
-
-  getMapUrl(): SafeResourceUrl {
-    let bbox = '10.0,50.0,11.0,51.0'; // Default: Europa-Mitte
-    
-    if (this.selectedDeparture?.lat && this.selectedDeparture?.lng && 
-        this.selectedArrival?.lat && this.selectedArrival?.lng) {
-      // Berechne Bounding Box für beide Flughäfen
-      const minLng = Math.min(this.selectedDeparture.lng, this.selectedArrival.lng);
-      const maxLng = Math.max(this.selectedDeparture.lng, this.selectedArrival.lng);
-      const minLat = Math.min(this.selectedDeparture.lat, this.selectedArrival.lat);
-      const maxLat = Math.max(this.selectedDeparture.lat, this.selectedArrival.lat);
-      
-      // Füge etwas Padding hinzu
-      const padding = 2;
-      bbox = `${minLng - padding},${minLat - padding},${maxLng + padding},${maxLat + padding}`;
-    }
-    
-    // Erstelle die Marker-Parameter für beide Flughäfen
-    const departureMarker = this.selectedDeparture?.lat && this.selectedDeparture?.lng 
-      ? `&marker=${this.selectedDeparture.lat},${this.selectedDeparture.lng}`
-      : '';
-    const arrivalMarker = this.selectedArrival?.lat && this.selectedArrival?.lng
-      ? `&marker=${this.selectedArrival.lat},${this.selectedArrival.lng}`
-      : '';
-    
-    const url = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik${departureMarker}${arrivalMarker}`;
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 }
