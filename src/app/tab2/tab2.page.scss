@@ -1,30 +1,45 @@
 /* Base Styles */
 .content-bg {
-  --background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);
+  position: relative;
 }
 
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+.background-visual {
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 220px;
+  background: linear-gradient(120deg, #6366f1 0%, #a5b4fc 100%);
+  border-bottom-left-radius: 48px;
+  border-bottom-right-radius: 48px;
+  z-index: 1;
+  filter: blur(0.5px) brightness(0.95);
 }
 
 /* Header Styles */
-.header-toolbar {
-  --background: rgba(15, 32, 39, 0.8);
+.header-toolbar.glass-blur {
+  background: rgba(255,255,255,0.7) !important;
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 4px 24px rgba(99,102,241,0.08);
+  border-bottom: 1px solid rgba(99,102,241,0.08);
 }
 
-.title-gradient {
-  background: linear-gradient(90deg, #ff8a00, #e52e71);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #3730a3;
+  .header-icon {
+    font-size: 2rem;
+    color: #6366f1;
+  }
+  .title-gradient {
+    background: linear-gradient(90deg, #6366f1 0%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+  }
 }
 
 .back-button {
@@ -82,348 +97,284 @@
 }
 
 /* Form Styles */
-.form-container {
+.form-container.glass-card {
+  margin: 40px 16px 0 16px;
+  padding: 32px 20px 24px 20px;
+  border-radius: 32px;
+  background: rgba(255,255,255,0.7);
+  box-shadow: 0 8px 32px rgba(99,102,241,0.10);
+  backdrop-filter: blur(16px);
   position: relative;
-  z-index: 1;
-  padding-top: 20px;
+  z-index: 2;
+  animation: fadeIn 0.8s;
 }
 
-.card-header {
+.card-header-modern {
   text-align: center;
-  padding-bottom: 0;
-}
-
-.app-logo {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 10px;
-  filter: drop-shadow(0 0 10px rgba(255,138,0,0.7));
-}
-
-.card-title {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 5px;
-  letter-spacing: 0.5px;
-}
-
-.card-subtitle {
-  color: rgba(255,255,255,0.7);
-  font-size: 1rem;
-}
-
-.floating-item {
-  --background: rgba(255,255,255,0.05);
-  --border-radius: 12px;
-  --padding-start: 10px;
-  --inner-padding-end: 10px;
-  margin-bottom: 20px;
-  transition: all 0.3s ease;
-
-  ion-label {
-    color: rgba(255,255,255,0.7);
-    font-weight: 500;
+  margin-bottom: 24px;
+  .app-logo-modern {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 8px;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(99,102,241,0.10);
   }
-
-  ion-input {
-    --color: #fff;
-    --padding-top: 15px;
+  .card-title-modern {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #3730a3;
+    margin-bottom: 4px;
   }
-
-  .input-icon {
-    color: #ff8a00;
-    font-size: 20px;
-    margin-right: 10px;
-  }
-
-  &.item-has-focus {
-    --background: rgba(255,255,255,0.1);
-    box-shadow: 0 0 0 2px rgba(255,138,0,0.3);
+  .card-subtitle-modern {
+    color: #6366f1;
+    font-size: 1.1rem;
+    margin-bottom: 0;
   }
 }
 
-.submit-btn {
-  --background: linear-gradient(90deg, #ff8a00, #e52e71);
-  --background-hover: linear-gradient(90deg, #ff8a00, #e52e71);
-  --background-activated: linear-gradient(90deg, #e52e71, #ff8a00);
-  --border-radius: 50px;
-  height: 50px;
+.auth-form-modern {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.passenger-form-modern {
+  background: rgba(245,245,255,0.7);
+  border-radius: 24px;
+  box-shadow: 0 2px 12px rgba(99,102,241,0.06);
+  padding: 20px 12px 12px 12px;
+  margin-bottom: 12px;
+  position: relative;
+  .passenger-header-modern {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    h3 {
+      font-size: 1.1rem;
+      color: #6366f1;
+      font-weight: 600;
+      margin: 0;
+    }
+    .remove-btn-modern {
+      --color: #ef4444;
+      font-size: 1.2rem;
+    }
+  }
+  .input-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    .form-item-modern {
+      flex: 1 1 160px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 12px;
+      margin-bottom: 0;
+      box-shadow: 0 1px 4px rgba(99,102,241,0.04);
+      .input-icon-modern {
+        color: #6366f1;
+        font-size: 1.3rem;
+      }
+      ion-label {
+        color: #6366f1;
+        font-weight: 500;
+      }
+      ion-input, ion-select {
+        font-size: 1.05rem;
+        color: #3730a3;
+      }
+    }
+  }
+}
+
+.add-passenger-btn-modern {
+  --background: rgba(99,102,241,0.08);
+  --color: #6366f1;
+  --border-radius: 16px;
   font-weight: 600;
-  letter-spacing: 0.5px;
-  margin-top: 25px;
-  --box-shadow: 0 4px 20px rgba(229, 46, 113, 0.4);
-  transition: all 0.3s ease;
-
+  margin-bottom: 8px;
   ion-icon {
-    font-size: 20px;
+    font-size: 1.3rem;
   }
+}
 
-  &:hover {
-    --box-shadow: 0 6px 25px rgba(229, 46, 113, 0.6);
-    transform: translateY(-2px);
+.submit-btn-modern {
+  --background: linear-gradient(90deg, #6366f1 0%, #a5b4fc 100%);
+  --color: white;
+  --border-radius: 20px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 16px rgba(99,102,241,0.12);
+  margin-bottom: 8px;
+  ion-icon {
+    font-size: 1.3rem;
   }
 }
 
 /* Welcome Screen */
-.welcome-screen {
-  position: relative;
-  z-index: 1;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.success-animation {
-  width: 100px;
-  height: 100px;
-  margin: 0 auto 20px;
+.welcome-screen-modern {
+  margin: 40px 16px 0 16px;
+  z-index: 2;
   position: relative;
 }
 
-.checkmark {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  display: block;
-  stroke-width: 4;
-  stroke: #4ade80;
-  stroke-miterlimit: 10;
-  box-shadow: 0 0 0 rgba(74, 222, 128, 0.4);
-  animation: checkmark-fill 0.4s ease-in-out 0.4s forwards, checkmark-scale 0.3s ease-in-out 0.9s both;
+.confetti-container-modern {
+  position: absolute;
+  left: 0; right: 0; top: -32px; height: 32px;
+  pointer-events: none;
+  z-index: 3;
+}
+.confetti-modern {
+  width: 8px; height: 16px;
+  background: linear-gradient(120deg, #6366f1 0%, #a5b4fc 100%);
+  border-radius: 4px;
+  margin: 0 2px;
+  display: inline-block;
+  animation: confettiDrop 1.2s infinite linear alternate;
 }
 
-.checkmark-path {
-  transform-origin: 50% 50%;
-  stroke-dasharray: 48;
-  stroke-dashoffset: 48;
-  animation: checkmark-stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+.welcome-card-modern.glass-card {
+  border-radius: 32px;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 8px 32px rgba(99,102,241,0.10);
+  backdrop-filter: blur(16px);
+  padding: 32px 20px 24px 20px;
+  margin-top: 24px;
+  text-align: center;
 }
-
-@keyframes checkmark-stroke {
-  100% { stroke-dashoffset: 0; }
+.success-animation-modern {
+  margin: 0 auto 12px auto;
+  .checkmark-modern {
+    width: 48px; height: 48px;
+    stroke: #22c55e;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    animation: checkmarkDraw 0.7s cubic-bezier(0.65,0,0.45,1) forwards;
+  }
+  .checkmark-path-modern {
+    stroke: #22c55e;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
 }
-
-@keyframes checkmark-scale {
-  0%, 100% { transform: none; }
-  50% { transform: scale3d(1.1, 1.1, 1); }
-}
-
-@keyframes checkmark-fill {
-  100% { box-shadow: inset 0 0 0 100px rgba(74, 222, 128, 0.1); }
-}
-
-.welcome-card {
-  background: rgba(15, 32, 39, 0.7);
-  backdrop-filter: blur(15px);
-}
-
-.welcome-title {
+.welcome-title-modern {
   font-size: 2rem;
   font-weight: 700;
-  color: #fff;
-  text-align: center;
-  line-height: 1.3;
-  margin-bottom: 10px;
-  letter-spacing: 0.5px;
+  color: #3730a3;
+  margin-bottom: 8px;
 }
-
-.welcome-text {
-  color: rgba(255,255,255,0.8);
-  text-align: center;
+.welcome-text-modern {
+  color: #6366f1;
   font-size: 1.1rem;
-  margin-bottom: 30px;
+  margin-bottom: 16px;
 }
-
-.boarding-pass {
-  background: rgba(255,255,255,0.1);
-  border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 30px;
-  border-left: 4px solid #ff8a00;
-}
-
-.pass-detail {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-
-  span {
-    color: rgba(255,255,255,0.6);
-    font-size: 0.9rem;
-  }
-
-  strong {
-    color: #fff;
-    font-weight: 600;
-  }
-}
-
-.action-btn {
-  --background: linear-gradient(90deg, #4ade80, #3b82f6);
-  --box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
-  height: 50px;
-  font-weight: 600;
-  margin-bottom: 15px;
-}
-
-.logout-btn {
-  --color: rgba(255,255,255,0.7);
-  font-size: 0.9rem;
-
-  ion-icon {
-    color: rgba(255,255,255,0.7);
-  }
-}
-
-/* Confetti Animation */
-.confetti-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.confetti {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  opacity: 0;
-  animation: confettiFall 5s linear infinite;
-}
-
-@for $i from 1 through 50 {
-  .confetti:nth-child(#{$i}) {
-    left: random(100) * 1%;
-    background-color: hsl(random(360), 100%, 50%);
-    width: random(10) + 5px;
-    height: random(10) + 5px;
-    animation-delay: random(5) * -1s;
-    animation-duration: random(5) + 3s;
-  }
-}
-
-@keyframes confettiFall {
-  0% {
-    transform: translateY(-100px) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(100vh) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-.passenger-form {
-  margin-bottom: 20px;
-  padding: 15px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.15);
-  }
-}
-
-.passenger-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-
-  h3 {
-    margin: 0;
-    color: #fff;
-    font-size: 1.1em;
-    font-weight: 500;
-  }
-
-  ion-button {
-    --color: #ff8a00;
-    --background-hover: rgba(255, 138, 0, 0.1);
-  }
-}
-
-.add-passenger-btn {
-  margin: 10px 0 20px;
-  --color: #fff;
-  --background: rgba(255, 255, 255, 0.1);
-  --background-hover: rgba(255, 255, 255, 0.2);
-  --border-radius: 12px;
-  height: 45px;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  border: 1px dashed rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
-
-  ion-icon {
-    font-size: 20px;
-    margin-right: 8px;
-  }
-
-  &:hover {
-    --background: rgba(255, 255, 255, 0.15);
-    transform: translateY(-2px);
-  }
-}
-
-.boarding-passes {
+.boarding-passes-modern {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin: 20px 0;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.boarding-pass-modern {
+  display: flex;
+  align-items: center;
+  background: rgba(245,245,255,0.85);
+  border-radius: 20px;
+  box-shadow: 0 2px 12px rgba(99,102,241,0.08);
+  padding: 16px 18px;
+  gap: 16px;
+  .passenger-avatar-modern {
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, #6366f1 0%, #a5b4fc 100%);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-size: 2rem;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.10);
+  }
+  .pass-info-modern {
+    flex: 1;
+    text-align: left;
+    .passenger-name-modern {
+      font-weight: 600;
+      color: #3730a3;
+      font-size: 1.1rem;
+    }
+    .ticket-row-modern {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #6366f1;
+      font-size: 1rem;
+      .ticket-number-modern {
+        font-weight: 500;
+        letter-spacing: 1px;
+      }
+    }
+  }
+}
+.action-btn-modern {
+  --background: linear-gradient(90deg, #6366f1 0%, #a5b4fc 100%);
+  --color: white;
+  --border-radius: 20px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 16px rgba(99,102,241,0.12);
+  margin-bottom: 8px;
+  ion-icon {
+    font-size: 1.3rem;
+  }
+}
+.logout-btn-modern {
+  --background: rgba(99,102,241,0.08);
+  --color: #6366f1;
+  --border-radius: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  ion-icon {
+    font-size: 1.3rem;
+  }
 }
 
-.boarding-pass {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 10px;
-
-  .pass-detail {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-
-    span {
-      color: var(--ion-color-medium);
-      font-size: 0.9em;
-    }
-
-    strong {
-      color: var(--ion-color-light);
-    }
-  }
+/* Animationen */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes checkmarkDraw {
+  from { stroke-dashoffset: 48; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes confettiDrop {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(32px) rotate(8deg); }
 }
 
-.form-item {
-  --background: transparent;
-  --border-color: rgba(255, 255, 255, 0.2);
-  --highlight-color: var(--ion-color-primary);
-  margin-bottom: 1rem;
-
-  ion-select {
-    width: 100%;
-    max-width: 100%;
-    padding-left: 0;
+/* Responsive */
+@media (max-width: 600px) {
+  .form-container.glass-card, .welcome-screen-modern {
+    margin: 24px 4px 0 4px;
+    padding: 18px 4px 12px 4px;
+    border-radius: 18px;
   }
-
-  ion-select::part(icon) {
-    opacity: 0.5;
+  .boarding-pass-modern {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px 8px;
   }
-
-  ion-select::part(placeholder),
-  ion-select::part(text) {
-    color: var(--ion-color-light);
+  .card-header-modern .app-logo-modern {
+    width: 48px; height: 48px;
+  }
+  .welcome-title-modern {
+    font-size: 1.3rem;
   }
 }

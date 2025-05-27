@@ -1,52 +1,17 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AerodataboxService } from '../aerodatabox.service';
 import { lastValueFrom } from 'rxjs';
 import { CountryinfoService } from "../countryinfo.service";
+import { PassengerService, Passenger } from '../passenger.service';
 
-interface Flight {
-  number: string;
-  airline: {
-    name: string;
-  };
-  departure: {
-    airport: {
-      name: string;
-      iata: string;
-    };
-    scheduledTimeLocal: string;
-  };
-  arrival: {
-    airport: {
-      name: string;
-      iata: string;
-    };
-    scheduledTimeLocal: string;
-  };
-}
-
-interface Passenger {
-  firstName: string;
-  lastName: string;
-  nationality: string;
-  passportNumber: string;
-}
-
-interface CountryInfo {
+interface Airport {
   name: string;
-  capital: string;
-  region: string;
-  population: number;
-  travelRequirements: {
-    visa: {
-      type: string;
-      duration: string;
-    };
-    vaccinations: string[];
-    documents: string[];
-  };
+  iata: string;
+  countryCode: string;
 }
 
 @Component({
@@ -54,27 +19,33 @@ interface CountryInfo {
   templateUrl: './flugsuche.page.html',
   styleUrls: ['./flugsuche.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule]
+  imports: [IonicModule, CommonModule, FormsModule]
 })
-export class FlugsuchePage implements AfterViewInit {
-  selectedDeparture: any = null;
-  selectedArrival: any = null;
-  departureDate: string = '';
-  returnDate: string = '';
-  passengers: number = 1;
-  flights: Flight[] = [];
-  returnFlights: Flight[] = [];
+export class FlugsuchePage implements OnInit {
+  departureQuery = '';
+  arrivalQuery = '';
+  departureDate = '';
+  returnDate = '';
+  passengers = 1;
+  departureAirports: Airport[] = [];
+  arrivalAirports: Airport[] = [];
+  selectedDeparture: Airport | null = null;
+  selectedArrival: Airport | null = null;
   isLoading = false;
   errorMessage = '';
+  flights: any[] = [];
+  returnFlights: any[] = [];
+  loading: boolean = false;
   registeredPassengers: Passenger[] = [];
-  countryInfo: CountryInfo | null = null;
+  countryInfo: any = null;
   flightsCount: number = 0;
   debugApiResponse: any = null;
 
   constructor(
     private router: Router,
     private aeroService: AerodataboxService,
-    private countryInfoService: CountryinfoService
+    private countryInfoService: CountryinfoService,
+    private passengerService: PassengerService
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
@@ -89,8 +60,12 @@ export class FlugsuchePage implements AfterViewInit {
     }
   }
 
-  ngAfterViewInit() {
-    // Leere Methode, da keine Karte mehr initialisiert werden muss
+  ngOnInit() {
+    this.registeredPassengers = this.passengerService.getPassengers();
+    this.passengerService.passengers$.subscribe(passengers => {
+      this.registeredPassengers = passengers;
+      this.passengers = passengers.length;
+    });
   }
 
   loadPassengers() {
@@ -127,8 +102,8 @@ export class FlugsuchePage implements AfterViewInit {
 
       const departurePromise = lastValueFrom(
         this.aeroService.getFlightsBetweenAirports(
-          this.selectedDeparture.iata,
-          this.selectedArrival.iata,
+          this.selectedDeparture ? this.selectedDeparture.iata : '',
+          this.selectedArrival ? this.selectedArrival.iata : '',
           this.departureDate
         )
       );
@@ -136,8 +111,8 @@ export class FlugsuchePage implements AfterViewInit {
       const returnPromise = this.returnDate
         ? lastValueFrom(
           this.aeroService.getFlightsBetweenAirports(
-            this.selectedArrival.iata,
-            this.selectedDeparture.iata,
+            this.selectedArrival ? this.selectedArrival.iata : '',
+            this.selectedDeparture ? this.selectedDeparture.iata : '',
             this.returnDate
           )
         )
@@ -178,5 +153,102 @@ export class FlugsuchePage implements AfterViewInit {
       .map(char => 127397 + char.charCodeAt(0));
     
     return String.fromCodePoint(...codePoints);
+  }
+
+  searchDepartureAirports(term: string): void {
+    if (term.length >= 2) {
+      this.isLoading = true;
+      this.aeroService.searchAirports(term).subscribe({
+        next: (airports) => {
+          this.departureAirports = airports.items || [];
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Fehler bei der Flughafensuche:', error);
+          this.isLoading = false;
+        }
+      });
+    } else {
+      this.departureAirports = [];
+    }
+  }
+
+  searchArrivalAirports(term: string): void {
+    if (term.length >= 2) {
+      this.isLoading = true;
+      this.aeroService.searchAirports(term).subscribe({
+        next: (airports) => {
+          this.arrivalAirports = airports.items || [];
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Fehler bei der Flughafensuche:', error);
+          this.isLoading = false;
+        }
+      });
+    } else {
+      this.arrivalAirports = [];
+    }
+  }
+
+  selectDepartureAirport(airport: Airport): void {
+    this.selectedDeparture = airport;
+    this.departureQuery = airport.name;
+    this.departureAirports = [];
+  }
+
+  selectArrivalAirport(airport: Airport): void {
+    this.selectedArrival = airport;
+    this.arrivalQuery = airport.name;
+    this.arrivalAirports = [];
+  }
+
+  clearDeparture(): void {
+    this.selectedDeparture = null;
+    this.departureQuery = '';
+  }
+
+  clearArrival(): void {
+    this.selectedArrival = null;
+    this.arrivalQuery = '';
+  }
+
+  clearDepartureAirportsDelayed(): void {
+    setTimeout(() => {
+      this.departureAirports = [];
+    }, 200);
+  }
+
+  clearArrivalAirportsDelayed(): void {
+    setTimeout(() => {
+      this.arrivalAirports = [];
+    }, 200);
+  }
+
+  swapAirports(): void {
+    const temp = this.selectedDeparture;
+    this.selectedDeparture = this.selectedArrival;
+    this.selectedArrival = temp;
+    const tempQuery = this.departureQuery;
+    this.departureQuery = this.arrivalQuery;
+    this.arrivalQuery = tempQuery;
+  }
+
+  onDateChange(event: any, type: 'departure' | 'return'): void {
+    if (type === 'departure') {
+      this.departureDate = event.detail.value;
+    } else {
+      this.returnDate = event.detail.value;
+    }
+  }
+
+  searchFlights() {
+    if (!this.selectedDeparture || !this.selectedArrival) {
+      this.errorMessage = 'Bitte wählen Sie Abflug- und Zielflughafen aus';
+      return;
+    }
+    const departureIata = this.selectedDeparture ? this.selectedDeparture.iata : '';
+    const arrivalIata = this.selectedArrival ? this.selectedArrival.iata : '';
+    // ... wie gehabt ...
   }
 }

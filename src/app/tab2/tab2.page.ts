@@ -11,8 +11,7 @@ import { addIcons } from 'ionicons';
 import {
   airplane, personCircleOutline, peopleCircleOutline, mailOpenOutline,
   lockClosedOutline, rocketOutline, exitOutline, searchOutline,
-  homeOutline, chevronBackOutline, addOutline, removeOutline
-} from 'ionicons/icons';
+  homeOutline, chevronBackOutline, addOutline, removeOutline, removeCircleOutline, personOutline, peopleOutline, mailOutline, globeOutline, cardOutline, addCircleOutline, ticketOutline } from 'ionicons/icons';
 import { Router } from '@angular/router';
 import { CountryinfoService } from '../countryinfo.service';
 
@@ -59,11 +58,7 @@ export class Tab2Page {
     private router: Router,
     private countryInfoService: CountryinfoService
   ) {
-    addIcons({
-      airplane, personCircleOutline, peopleCircleOutline, mailOpenOutline,
-      lockClosedOutline, rocketOutline, exitOutline, searchOutline,
-      homeOutline, chevronBackOutline, addOutline, removeOutline
-    });
+    addIcons({personCircleOutline,removeCircleOutline,personOutline,peopleOutline,mailOutline,lockClosedOutline,globeOutline,cardOutline,addCircleOutline,rocketOutline,ticketOutline,searchOutline,exitOutline,airplane,peopleCircleOutline,mailOpenOutline,homeOutline,chevronBackOutline,addOutline,removeOutline});
     this.checkRegistration();
     this.loadCountries();
   }

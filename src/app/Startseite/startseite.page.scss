@@ -105,3 +105,522 @@
 .date-item ion-label {
   margin-top: -6px;
 }
+
+ion-header {
+  ion-toolbar {
+    --background: var(--ion-color-primary);
+    --color: white;
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      
+      ion-icon {
+        font-size: 24px;
+      }
+    }
+  }
+}
+
+ion-content {
+  --background: #f5f5f5;
+}
+
+.content-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.welcome-section {
+  text-align: center;
+  margin-bottom: 40px;
+  
+  h1 {
+    font-size: 2.5rem;
+    color: var(--ion-color-primary);
+    margin-bottom: 8px;
+  }
+  
+  .subtitle {
+    font-size: 1.2rem;
+    color: var(--ion-color-medium);
+  }
+}
+
+.search-container {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  margin-bottom: 40px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  
+  .search-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--ion-color-primary);
+    
+    ion-icon {
+      font-size: 28px;
+      color: var(--ion-color-primary);
+    }
+    
+    h2 {
+      margin: 0;
+      color: var(--ion-color-dark);
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+  }
+  
+  .search-form {
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+      align-items: start;
+      
+      &:last-of-type {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    .form-group {
+      position: relative;
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      
+      &:hover, &:focus-within {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+        border-color: var(--ion-color-primary);
+      }
+      
+      ion-icon {
+        font-size: 24px;
+        color: var(--ion-color-primary);
+        margin-bottom: 12px;
+      }
+      
+      .input-wrapper {
+        label {
+          display: block;
+          color: var(--ion-color-medium);
+          font-size: 0.9rem;
+          margin-bottom: 8px;
+          font-weight: 500;
+        }
+        
+        ion-input {
+          --padding-start: 0;
+          --padding-end: 0;
+          --padding-top: 0;
+          --padding-bottom: 0;
+          font-size: 1.1rem;
+          color: var(--ion-color-dark);
+          
+          &::part(native) {
+            padding: 0;
+          }
+        }
+      }
+      
+      &.departure, &.arrival {
+        .autocomplete-list {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+          margin-top: 8px;
+          z-index: 1000;
+          max-height: 200px;
+          overflow-y: auto;
+          border: 1px solid rgba(0, 0, 0, 0.05);
+          
+          ion-item {
+            --padding-start: 16px;
+            --padding-end: 16px;
+            --padding-top: 12px;
+            --padding-bottom: 12px;
+            
+            &:hover {
+              --background: #f8f9fa;
+            }
+            
+            ion-label {
+              h3 {
+                font-size: 1rem;
+                color: var(--ion-color-dark);
+                margin-bottom: 4px;
+                font-weight: 500;
+              }
+              
+              p {
+                font-size: 0.9rem;
+                color: var(--ion-color-medium);
+              }
+            }
+          }
+        }
+      }
+      
+      &.passengers {
+        .passenger-control {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: #f8f9fa;
+          border-radius: 12px;
+          padding: 12px 20px;
+          border: 1px solid rgba(0, 0, 0, 0.05);
+          
+          ion-button {
+            --padding-start: 8px;
+            --padding-end: 8px;
+            --color: var(--ion-color-primary);
+            --background: white;
+            --border-radius: 8px;
+            --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            
+            &:hover {
+              --background: var(--ion-color-primary);
+              --color: white;
+            }
+            
+            &[disabled] {
+              --color: var(--ion-color-medium);
+              --background: #f0f2f5;
+            }
+          }
+          
+          .passenger-count {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--ion-color-dark);
+            min-width: 40px;
+            text-align: center;
+            background: white;
+            padding: 4px 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          }
+        }
+      }
+    }
+    
+    .swap-button {
+      background: var(--ion-color-primary);
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 32px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.3);
+      
+      &:hover {
+        transform: scale(1.1) rotate(180deg);
+        box-shadow: 0 6px 16px rgba(var(--ion-color-primary-rgb), 0.4);
+      }
+      
+      ion-icon {
+        color: white;
+        font-size: 24px;
+      }
+    }
+  }
+  
+  .search-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: flex-end;
+    margin-top: 32px;
+    
+    ion-button {
+      --border-radius: 12px;
+      --padding-start: 24px;
+      --padding-end: 24px;
+      height: 48px;
+      font-weight: 500;
+      
+      &.clear-button {
+        --background: #f8f9fa;
+        --color: var(--ion-color-medium);
+        --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        
+        &:hover {
+          --background: #f0f2f5;
+          --box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        }
+      }
+      
+      &.search-button {
+        --background: var(--ion-color-primary);
+        --color: white;
+        --box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.3);
+        
+        &:hover {
+          --background: var(--ion-color-primary-shade);
+          --box-shadow: 0 6px 16px rgba(var(--ion-color-primary-rgb), 0.4);
+        }
+      }
+      
+      ion-icon {
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+.features-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+  
+  .feature-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-5px);
+    }
+    
+    ion-icon {
+      font-size: 48px;
+      color: var(--ion-color-primary);
+      margin-bottom: 16px;
+    }
+    
+    h3 {
+      color: var(--ion-color-dark);
+      margin-bottom: 12px;
+    }
+    
+    p {
+      color: var(--ion-color-medium);
+      margin: 0;
+    }
+  }
+}
+
+.flight-list {
+  display: grid;
+  gap: 24px;
+  
+  .flight-item {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    
+    .flight-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      
+      .airline {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        
+        .airline-logo {
+          width: 40px;
+          height: 40px;
+          background: var(--ion-color-primary);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          
+          ion-icon {
+            color: white;
+            font-size: 24px;
+          }
+        }
+        
+        .airline-name {
+          font-weight: 600;
+          color: var(--ion-color-dark);
+        }
+      }
+      
+      .flight-number {
+        color: var(--ion-color-medium);
+      }
+    }
+    
+    .flight-route {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      
+      .airport {
+        text-align: center;
+        
+        .time {
+          font-size: 1.2rem;
+          font-weight: 600;
+          color: var(--ion-color-dark);
+        }
+        
+        .airport-code {
+          color: var(--ion-color-medium);
+        }
+      }
+      
+      .flight-duration {
+        color: var(--ion-color-medium);
+        font-size: 0.9rem;
+      }
+    }
+    
+    .flight-details {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 20px;
+      
+      .detail {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--ion-color-medium);
+        
+        ion-icon {
+          color: var(--ion-color-primary);
+        }
+      }
+    }
+    
+    .flight-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+      .price {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--ion-color-primary);
+      }
+      
+      ion-button {
+        --border-radius: 8px;
+      }
+    }
+  }
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  
+  ion-spinner {
+    width: 48px;
+    height: 48px;
+    color: var(--ion-color-primary);
+  }
+}
+
+.error-message {
+  background: var(--ion-color-danger);
+  color: white;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+  .content-container {
+    padding: 16px;
+  }
+  
+  .welcome-section {
+    h1 {
+      font-size: 2rem;
+    }
+  }
+  
+  .search-container {
+    padding: 20px;
+    
+    .search-form {
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        
+        &:last-of-type {
+          grid-template-columns: 1fr;
+        }
+      }
+      
+      .swap-button {
+        margin: 0 auto;
+        transform: rotate(90deg);
+        
+        &:hover {
+          transform: rotate(90deg) scale(1.1);
+        }
+      }
+    }
+    
+    .search-actions {
+      flex-direction: column;
+      
+      ion-button {
+        width: 100%;
+      }
+    }
+  }
+  
+  .features-section {
+    grid-template-columns: 1fr;
+  }
+  
+  .flight-list {
+    .flight-item {
+      .flight-route {
+        flex-direction: column;
+        gap: 16px;
+      }
+      
+      .flight-details {
+        flex-direction: column;
+        gap: 12px;
+      }
+      
+      .flight-footer {
+        flex-direction: column;
+        gap: 16px;
+        
+        ion-button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

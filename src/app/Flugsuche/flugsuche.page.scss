@@ -4,8 +4,12 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 180px;
   z-index: 0;
+  background: linear-gradient(120deg, #6366f1 0%, #a5b4fc 100%);
+  border-bottom-left-radius: 36px;
+  border-bottom-right-radius: 36px;
+  filter: blur(0.5px) brightness(0.97);
 }
 
 .background-image {
@@ -27,7 +31,7 @@
 }
 
 ion-content {
-  --background: transparent;
+  --background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);
 }
 
 .passengers-card {
@@ -176,9 +180,11 @@ ion-accordion-group {
 }
 
 .content-container {
-  padding: 16px;
-  max-width: 1200px;
+  max-width: 600px;
   margin: 0 auto;
+  padding: 12px 4px 0 4px;
+  position: relative;
+  z-index: 2;
 }
 
 .map-container {
@@ -557,5 +563,824 @@ ion-accordion-group {
   font-size: 1.2em;
   margin-right: 8px;
   vertical-align: middle;
+}
+
+.flight-info {
+  background: var(--ion-color-light);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(var(--ion-color-medium-rgb), 0.2);
+
+  .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid rgba(var(--ion-color-primary-rgb), 0.1);
+
+    ion-icon {
+      font-size: 24px;
+      margin-right: 12px;
+      color: var(--ion-color-primary);
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--ion-color-dark);
+    }
+  }
+
+  .route-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    position: relative;
+    padding: 0 20px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, 
+        var(--ion-color-primary) 0%, 
+        var(--ion-color-secondary) 50%, 
+        var(--ion-color-primary) 100%);
+      z-index: 1;
+    }
+
+    .airport {
+      position: relative;
+      z-index: 2;
+      background: var(--ion-color-light);
+      padding: 0 12px;
+      text-align: center;
+      flex: 1;
+
+      .airport-code {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--ion-color-primary);
+        margin-bottom: 4px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .airport-name {
+        font-size: 0.9rem;
+        color: var(--ion-color-medium);
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 150px;
+      }
+    }
+
+    .route-line {
+      position: relative;
+      z-index: 2;
+      background: var(--ion-color-light);
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .line {
+        width: 60px;
+        height: 2px;
+        background: var(--ion-color-medium);
+        position: relative;
+
+        &::before {
+          content: '';
+          position: absolute;
+          right: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 4px 0 4px 6px;
+          border-color: transparent transparent transparent var(--ion-color-medium);
+        }
+      }
+
+      ion-icon {
+        color: var(--ion-color-primary);
+        font-size: 20px;
+      }
+    }
+  }
+
+  .flight-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+
+    .detail-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+
+      ion-icon {
+        font-size: 20px;
+        color: var(--ion-color-primary);
+      }
+
+      .detail-content {
+        h3 {
+          margin: 0;
+          font-size: 0.9rem;
+          color: var(--ion-color-medium);
+          font-weight: 500;
+        }
+
+        p {
+          margin: 4px 0 0;
+          font-size: 1rem;
+          color: var(--ion-color-dark);
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
+.passenger-list {
+  margin-bottom: 24px;
+
+  .passenger-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+
+    h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--ion-color-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      ion-icon {
+        color: var(--ion-color-primary);
+      }
+    }
+
+    .passenger-count {
+      background: var(--ion-color-primary);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+  }
+
+  .passenger-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateX(4px);
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--ion-color-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--ion-color-primary);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .passenger-info {
+      flex: 1;
+
+      .name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--ion-color-dark);
+        margin: 0 0 4px;
+      }
+
+      .nationality {
+        font-size: 0.9rem;
+        color: var(--ion-color-medium);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .flag {
+          font-size: 1.2em;
+          margin-right: 8px;
+          vertical-align: middle;
+        }
+      }
+    }
+
+    .entry-status {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      &.allowed {
+        background: rgba(var(--ion-color-success-rgb), 0.1);
+        color: var(--ion-color-success);
+      }
+
+      &.not-allowed {
+        background: rgba(var(--ion-color-danger-rgb), 0.1);
+        color: var(--ion-color-danger);
+      }
+
+      ion-icon {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+.country-info {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(var(--ion-color-medium-rgb), 0.2);
+
+  .info-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid rgba(var(--ion-color-primary-rgb), 0.1);
+
+    ion-icon {
+      font-size: 24px;
+      margin-right: 12px;
+      color: var(--ion-color-primary);
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--ion-color-dark);
+    }
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+
+    .info-section {
+      h4 {
+        font-size: 1rem;
+        color: var(--ion-color-medium);
+        margin: 0 0 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        ion-icon {
+          color: var(--ion-color-primary);
+        }
+      }
+
+      .info-content {
+        background: var(--ion-color-light);
+        border-radius: 12px;
+        padding: 16px;
+
+        p {
+          margin: 0;
+          font-size: 1.1rem;
+          color: var(--ion-color-dark);
+          font-weight: 500;
+        }
+
+        .documents-list, .vaccinations-list {
+          margin-top: 12px;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+
+          ion-chip {
+            margin: 0;
+            background: white;
+            border: 1px solid rgba(var(--ion-color-medium-rgb), 0.2);
+            font-size: 0.9rem;
+            height: 32px;
+            transition: all 0.2s ease;
+
+            &:hover {
+              background: var(--ion-color-primary);
+              color: white;
+              border-color: var(--ion-color-primary);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.flight-list {
+  margin-top: 24px;
+
+  .flight-item {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(var(--ion-color-medium-rgb), 0.2);
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+
+    .flight-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(var(--ion-color-medium-rgb), 0.2);
+
+      .airline {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .airline-logo {
+          width: 40px;
+          height: 40px;
+          background: var(--ion-color-light);
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.2rem;
+          color: var(--ion-color-primary);
+        }
+
+        .airline-name {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: var(--ion-color-dark);
+        }
+      }
+
+      .flight-number {
+        font-size: 0.9rem;
+        color: var(--ion-color-medium);
+        background: var(--ion-color-light);
+        padding: 4px 12px;
+        border-radius: 20px;
+      }
+    }
+
+    .flight-route {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      position: relative;
+      padding: 0 20px;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, 
+          var(--ion-color-primary) 0%, 
+          var(--ion-color-secondary) 50%, 
+          var(--ion-color-primary) 100%);
+      }
+
+      .airport {
+        position: relative;
+        z-index: 1;
+        background: white;
+        padding: 0 12px;
+        text-align: center;
+
+        .time {
+          font-size: 1.4rem;
+          font-weight: 700;
+          color: var(--ion-color-dark);
+          margin-bottom: 4px;
+        }
+
+        .airport-code {
+          font-size: 1rem;
+          color: var(--ion-color-medium);
+          margin: 0;
+        }
+      }
+
+      .flight-duration {
+        position: relative;
+        z-index: 1;
+        background: white;
+        padding: 0 16px;
+        text-align: center;
+        color: var(--ion-color-medium);
+        font-size: 0.9rem;
+      }
+    }
+
+    .flight-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+
+      .detail {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        color: var(--ion-color-medium);
+
+        ion-icon {
+          color: var(--ion-color-primary);
+        }
+      }
+    }
+
+    .flight-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid rgba(var(--ion-color-medium-rgb), 0.2);
+
+      .price {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--ion-color-primary);
+      }
+
+      ion-button {
+        --border-radius: 20px;
+        --padding-start: 24px;
+        --padding-end: 24px;
+      }
+    }
+  }
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.error-message {
+  text-align: center;
+  padding: 20px;
+  color: var(--ion-color-danger);
+  background: rgba(var(--ion-color-danger-rgb), 0.1);
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+ion-content {
+  --background: var(--ion-color-light);
+}
+
+@media (max-width: 576px) {
+  .content-container {
+    padding: 12px;
+  }
+
+  .flight-info {
+    padding: 16px;
+
+    .header h2 {
+      font-size: 1.2rem;
+    }
+
+    .route-details {
+      padding: 0 12px;
+
+      .airport {
+        .airport-code {
+          font-size: 1.4rem;
+        }
+
+        .airport-name {
+          font-size: 0.8rem;
+        }
+      }
+    }
+
+    .flight-details {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .passenger-list {
+    .passenger-item {
+      padding: 12px;
+
+      .avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+
+      .passenger-info {
+        .name {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+
+  .country-info {
+    padding: 16px;
+
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .flight-list {
+    .flight-item {
+      padding: 16px;
+
+      .flight-route {
+        .airport {
+          .time {
+            font-size: 1.2rem;
+          }
+
+          .airport-code {
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+ion-header {
+  ion-toolbar {
+    background: rgba(255,255,255,0.7) !important;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 24px rgba(99,102,241,0.08);
+    border-bottom: 1px solid rgba(99,102,241,0.08);
+  }
+  ion-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #3730a3;
+    ion-icon {
+      font-size: 1.5rem;
+      color: #6366f1;
+    }
+    .title-gradient {
+      background: linear-gradient(90deg, #6366f1 0%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+  }
+}
+
+ion-card.info-card, ion-card.flights-card, .requirements-card, .country-info-content, .passenger-list, ion-accordion-group {
+  background: rgba(255,255,255,0.7) !important;
+  border-radius: 28px !important;
+  box-shadow: 0 8px 32px rgba(99,102,241,0.10) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(99,102,241,0.05) !important;
+}
+
+ion-card-header, .accordion-header {
+  background: transparent !important;
+  border-radius: 28px 28px 0 0 !important;
+  padding: 16px 16px 8px 16px !important;
+  color: #3730a3 !important;
+  font-weight: 700;
+  font-size: 1.1rem;
+  ion-icon {
+    color: #6366f1 !important;
+    font-size: 1.3rem !important;
+  }
+}
+
+ion-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.2rem;
+  color: #3730a3;
+}
+
+.flight-route, .flight-details, .country-info-content, .passenger-list {
+  background: transparent !important;
+  border-radius: 18px;
+}
+
+ion-item, .passenger-item {
+  --background: rgba(255,255,255,0.8) !important;
+  --border-radius: 16px !important;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.08) !important;
+}
+
+ion-badge {
+  background: linear-gradient(90deg, #6366f1 0%, #a5b4fc 100%) !important;
+  color: white !important;
+  border-radius: 12px !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+ion-chip {
+  background: rgba(99,102,241,0.08) !important;
+  color: #6366f1 !important;
+  border-radius: 12px !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  height: 32px;
+  margin: 2px 4px 2px 0;
+  border: 1px solid #a5b4fc !important;
+}
+
+ion-button {
+  --border-radius: 16px !important;
+  --padding-start: 18px !important;
+  --padding-end: 18px !important;
+  height: 38px !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  background: linear-gradient(90deg, #6366f1 0%, #a5b4fc 100%) !important;
+  color: white !important;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.12) !important;
+}
+
+ion-spinner {
+  width: 32px !important;
+  height: 32px !important;
+  color: #6366f1 !important;
+}
+
+.error-message {
+  background: #ef4444 !important;
+  color: white !important;
+  padding: 10px !important;
+  border-radius: 10px !important;
+  text-align: center !important;
+  margin: 10px 0 !important;
+  font-size: 0.95rem !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  .content-container {
+    padding: 4px 2px 0 2px;
+  }
+  ion-card.info-card, ion-card.flights-card, .requirements-card, .country-info-content, .passenger-list, ion-accordion-group {
+    border-radius: 16px !important;
+    padding: 6px 2px 6px 2px !important;
+  }
+  ion-card-header, .accordion-header {
+    border-radius: 16px 16px 0 0 !important;
+    padding: 10px 10px 6px 10px !important;
+    font-size: 1rem;
+  }
+  ion-card-title {
+    font-size: 1rem;
+  }
+}
+
+.compact-card {
+  padding: 4px 2px 2px 2px !important;
+  margin-bottom: 8px !important;
+  border-radius: 14px !important;
+}
+.flight-form-compact {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.form-row {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 2px;
+}
+.form-group {
+  flex: 1;
+  border-radius: 6px;
+  padding: 2px 2px 2px 2px;
+  margin-bottom: 0;
+  position: relative;
+  ion-icon {
+    font-size: 12px;
+    margin-bottom: 0;
+  }
+  .input-wrapper {
+    label {
+      font-size: 0.7rem;
+      margin-bottom: 0;
+    }
+    ion-input {
+      font-size: 0.8rem;
+      min-height: 22px;
+    }
+  }
+}
+.autocomplete-list.absolute-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.15);
+  max-height: 120px;
+  overflow-y: auto;
+  margin-top: 2px;
+}
+.autocomplete-list.absolute-dropdown ion-item {
+  --padding-start: 6px;
+  --padding-end: 6px;
+  --padding-top: 4px;
+  --padding-bottom: 4px;
+  font-size: 0.85rem;
+}
+.autocomplete-list.absolute-dropdown ion-label h3 {
+  font-size: 0.85rem;
+  margin-bottom: 0;
+}
+.autocomplete-list.absolute-dropdown ion-label p {
+  font-size: 0.7rem;
+  margin-bottom: 0;
+}
+.swap-button {
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  background: #6366f1;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(99,102,241,0.10);
+  ion-icon {
+    color: white;
+    font-size: 0.8rem;
+  }
 }
 
