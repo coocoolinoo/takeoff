@@ -29,13 +29,13 @@ export class AerodataboxService {
   private readonly countryInfoUrl = 'https://restcountries.com/v3.1/alpha';
   private readonly allCountriesUrl = 'https://restcountries.com/v3.1/all';
   private apiKey = 'aero_8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c';
-  
+
   // EU-Länder
   private euCountries = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE'];
-  
+
   // Schengen-Länder (inkl. Nicht-EU)
   private schengenCountries = [...this.euCountries, 'IS', 'LI', 'NO', 'CH'];
-  
+
   // Länder mit speziellen Visa-Anforderungen
   private visaRequiredCountries: { [key: string]: VisaRequirement } = {
     'US': { type: 'ESTA oder Visum', duration: '90 Tage' },
@@ -105,8 +105,7 @@ export class AerodataboxService {
           name: countryData.name.common,
           capital: countryData.capital?.[0] || 'Unknown',
           region: countryData.region,
-          population: countryData.population,
-          travelRequirements: {
+          population: countryData.population, travelRequirements: {
             visa: this.getVisaRequirements(countryCode),
             vaccinations: this.getVaccinationRequirements(countryCode),
             documents: this.getRequiredDocuments(countryCode)
@@ -194,7 +193,7 @@ export class AerodataboxService {
 
   private getVaccinationRequirements(countryCode: string): string[] {
     const baseVaccinations = ['COVID-19 (empfohlen)', 'Tetanus (empfohlen)'];
-    
+
     // Spezielle Impfanforderungen für bestimmte Regionen
     if (['BR', 'CO', 'PE', 'EC', 'BO'].includes(countryCode)) {
       return [...baseVaccinations, 'Gelbfieber (empfohlen)'];
@@ -211,7 +210,7 @@ export class AerodataboxService {
 
   private getRequiredDocuments(countryCode: string): string[] {
     const baseDocuments = ['Gültiger Reisepass'];
-    
+
     if (this.euCountries.includes(countryCode)) {
       return ['Gültiger Reisepass oder Personalausweis'];
     }
