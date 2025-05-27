@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { AerodataboxService } from '../aerodatabox.service';
 import { lastValueFrom } from 'rxjs';
 import {CountryinfoService} from "../countryinfo.service";
-import * as L from 'leaflet';
+import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
 interface Flight {
   number: string;
@@ -57,13 +57,12 @@ export class FlugsuchePage implements AfterViewInit {
   countryInfo: CountryInfo | null = null;
   flightsCount: number = 0;
   debugApiResponse: any = null;
-  private map: L.Map | null = null;
-  private polyline: L.Polyline | null = null;
 
   constructor(
     private router: Router,
     private aeroService: AerodataboxService,
-    private countryInfoService: CountryinfoService
+    private countryInfoService: CountryinfoService,
+    private sanitizer: DomSanitizer
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
@@ -76,6 +75,10 @@ export class FlugsuchePage implements AfterViewInit {
       this.loadFlights();
       this.loadCountryInfo();
     }
+  }
+
+  ngAfterViewInit() {
+    // Leere Methode, da keine Karte mehr initialisiert werden muss
   }
 
   loadPassengers() {
@@ -96,7 +99,6 @@ export class FlugsuchePage implements AfterViewInit {
         console.error('Error loading country info:', error);
       }
     }
-    this.updateMap();
   }
 
   async loadFlights(): Promise<void> {
@@ -146,7 +148,6 @@ export class FlugsuchePage implements AfterViewInit {
       this.errorMessage = 'Fehler bei der Verbindung zur Flugdatenbank';
     } finally {
       this.isLoading = false;
-      this.updateMap();
     }
   }
 
@@ -155,33 +156,31 @@ export class FlugsuchePage implements AfterViewInit {
     return this.aeroService.canEnterCountry(passenger.nationality, this.selectedArrival.countryCode);
   }
 
-  ngAfterViewInit() {
-    this.updateMap();
-  }
-
-  updateMap() {
-    // Hole Koordinaten oder nutze Dummy-Koordinaten
-    const fromLatLng: [number, number] = this.selectedDeparture?.lat && this.selectedDeparture?.lng
-      ? [this.selectedDeparture.lat, this.selectedDeparture.lng]
-      : [48.1103, 16.5697]; // Wien als Fallback
-    const toLatLng: [number, number] = this.selectedArrival?.lat && this.selectedArrival?.lng
-      ? [this.selectedArrival.lat, this.selectedArrival.lng]
-      : [40.6413, -73.7781]; // JFK als Fallback
-    const centerLat = (fromLatLng[0] + toLatLng[0]) / 2;
-    const centerLng = (fromLatLng[1] + toLatLng[1]) / 2;
-
-    // Initialisiere oder update die Karte
-    if (!this.map) {
-      this.map = L.map('map').setView([centerLat, centerLng], 3);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-      }).addTo(this.map);
-    } else {
-      this.map.setView([centerLat, centerLng], 3);
-      if (this.polyline) {
-        this.map.removeLayer(this.polyline);
-      }
+  getMapUrl(): SafeResourceUrl {
+    let bbox = '10.0,50.0,11.0,51.0'; // Default: Europa-Mitte
+    
+    if (this.selectedDeparture?.lat && this.selectedDeparture?.lng && 
+        this.selectedArrival?.lat && this.selectedArrival?.lng) {
+      // Berechne Bounding Box für beide Flughäfen
+      const minLng = Math.min(this.selectedDeparture.lng, this.selectedArrival.lng);
+      const maxLng = Math.max(this.selectedDeparture.lng, this.selectedArrival.lng);
+      const minLat = Math.min(this.selectedDeparture.lat, this.selectedArrival.lat);
+      const maxLat = Math.max(this.selectedDeparture.lat, this.selectedArrival.lat);
+      
+      // Füge etwas Padding hinzu
+      const padding = 2;
+      bbox = `${minLng - padding},${minLat - padding},${maxLng + padding},${maxLat + padding}`;
     }
-    this.polyline = L.polyline([fromLatLng, toLatLng], { color: 'blue' }).addTo(this.map);
+    
+    // Erstelle die Marker-Parameter für beide Flughäfen
+    const departureMarker = this.selectedDeparture?.lat && this.selectedDeparture?.lng 
+      ? `&marker=${this.selectedDeparture.lat},${this.selectedDeparture.lng}`
+      : '';
+    const arrivalMarker = this.selectedArrival?.lat && this.selectedArrival?.lng
+      ? `&marker=${this.selectedArrival.lat},${this.selectedArrival.lng}`
+      : '';
+    
+    const url = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik${departureMarker}${arrivalMarker}`;
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 }

@@ -2,10 +2,18 @@
   <ion-toolbar>
     <ion-title>Flugsuche</ion-title>
   </ion-toolbar>
-  <div class="map-container">
-    <div id="map" style="width: 100%; height: 200px; border-radius: 12px;"></div>
-  </div>
 </ion-header>
+
+<!-- Statische OSM-Karte ganz oben -->
+<div class="map-container">
+  <iframe
+    class="map-iframe"
+    [src]="getMapUrl()"
+    allowfullscreen
+    loading="lazy"
+    style="width: 100%; height: 200px; border-radius: 12px; border: none;"
+  ></iframe>
+</div>
 
 <ion-content [fullscreen]="true">
   <div class="background-container">
