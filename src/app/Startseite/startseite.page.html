@@ -16,119 +16,115 @@
       <p class="subtitle">Ihre Reise beginnt hier</p>
     </div>
 
-    <div class="search-container">
-      <div class="search-header">
-        <ion-icon name="search-outline"></ion-icon>
-        <h2>Flug suchen</h2>
-      </div>
-
-      <div class="search-form">
-        <div class="form-row">
-          <div class="form-group departure">
-            <ion-icon name="airplane-outline"></ion-icon>
-            <div class="input-wrapper">
-              <label>Von</label>
-              <ion-input
-                [(ngModel)]="departureQuery"
-                (ionInput)="searchDepartureAirports(departureQuery || '')"
-                (ionBlur)="clearDepartureAirportsDelayed()"
-                placeholder="z.B. Wien"
-                autocomplete="off"
-              ></ion-input>
-              <ion-list *ngIf="departureAirports.length > 0" class="autocomplete-list">
-                <ion-item *ngFor="let airport of departureAirports" (mousedown)="$event.preventDefault(); selectDepartureAirport(airport)">
-                  <ion-label>
-                    <h3>{{ airport.name }}</h3>
-                    <p>{{ airport.iata }} - {{ airport.countryCode }}</p>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
+    <ion-card class="info-card compact-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="search-outline"></ion-icon>
+          Flug suchen
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="flight-form-compact">
+          <div class="form-row">
+            <div class="form-group departure">
+              <ion-icon name="airplane-outline"></ion-icon>
+              <div class="input-wrapper">
+                <label>Von</label>
+                <ion-input
+                  [(ngModel)]="departureQuery"
+                  (ionInput)="searchDepartureAirports(departureQuery || '')"
+                  (ionBlur)="clearDepartureAirportsDelayed()"
+                  placeholder="z.B. Wien"
+                  autocomplete="off"
+                ></ion-input>
+                <ion-list *ngIf="departureAirports.length > 0" class="autocomplete-list absolute-dropdown">
+                  <ion-item *ngFor="let airport of departureAirports" (mousedown)="$event.preventDefault(); selectDepartureAirport(airport)">
+                    <ion-label>
+                      <h3>{{ airport.name }}</h3>
+                      <p>{{ airport.iata }} - {{ airport.countryCode }}</p>
+                    </ion-label>
+                  </ion-item>
+                </ion-list>
+              </div>
             </div>
-          </div>
-
-          <button class="swap-button" (click)="swapAirports()">
-            <ion-icon name="swap-horizontal-outline"></ion-icon>
-          </button>
-
-          <div class="form-group arrival">
-            <ion-icon name="airplane-outline"></ion-icon>
-            <div class="input-wrapper">
-              <label>Nach</label>
-              <ion-input
-                [(ngModel)]="arrivalQuery"
-                (ionInput)="searchArrivalAirports(arrivalQuery || '')"
-                (ionBlur)="clearArrivalAirportsDelayed()"
-                placeholder="z.B. Rom"
-                autocomplete="off"
-              ></ion-input>
-              <ion-list *ngIf="arrivalAirports.length > 0" class="autocomplete-list">
-                <ion-item *ngFor="let airport of arrivalAirports" (mousedown)="$event.preventDefault(); selectArrivalAirport(airport)">
-                  <ion-label>
-                    <h3>{{ airport.name }}</h3>
-                    <p>{{ airport.iata }} - {{ airport.countryCode }}</p>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group date">
-            <ion-icon name="calendar-outline"></ion-icon>
-            <div class="input-wrapper">
-              <label>Abflugdatum</label>
-              <ion-input
-                type="date"
-                [(ngModel)]="departureDate"
-                [value]="departureDate"
-                (ionChange)="onDateChange($event, 'departure')"
-              ></ion-input>
-            </div>
-          </div>
-
-          <div class="form-group date">
-            <ion-icon name="calendar-outline"></ion-icon>
-            <div class="input-wrapper">
-              <label>Rückflugdatum</label>
-              <ion-input
-                type="date"
-                [(ngModel)]="returnDate"
-                [value]="returnDate"
-                (ionChange)="onDateChange($event, 'return')"
-              ></ion-input>
-            </div>
-          </div>
-
-          <div class="form-group passengers">
-            <ion-icon name="people-outline"></ion-icon>
-            <div class="input-wrapper">
-              <label>Passagiere</label>
-              <div class="passenger-control">
-                <ion-button fill="clear" (click)="decreasePassengers()" [disabled]="passengers <= 1">
-                  <ion-icon name="remove-outline"></ion-icon>
-                </ion-button>
-                <span class="passenger-count">{{ passengers }}</span>
-                <ion-button fill="clear" (click)="increasePassengers()" [disabled]="passengers >= 9">
-                  <ion-icon name="add-outline"></ion-icon>
-                </ion-button>
+            <button class="swap-button" (click)="swapAirports()">
+              <ion-icon name="swap-horizontal-outline"></ion-icon>
+            </button>
+            <div class="form-group arrival">
+              <ion-icon name="airplane-outline"></ion-icon>
+              <div class="input-wrapper">
+                <label>Nach</label>
+                <ion-input
+                  [(ngModel)]="arrivalQuery"
+                  (ionInput)="searchArrivalAirports(arrivalQuery || '')"
+                  (ionBlur)="clearArrivalAirportsDelayed()"
+                  placeholder="z.B. Rom"
+                  autocomplete="off"
+                ></ion-input>
+                <ion-list *ngIf="arrivalAirports.length > 0" class="autocomplete-list absolute-dropdown">
+                  <ion-item *ngFor="let airport of arrivalAirports" (mousedown)="$event.preventDefault(); selectArrivalAirport(airport)">
+                    <ion-label>
+                      <h3>{{ airport.name }}</h3>
+                      <p>{{ airport.iata }} - {{ airport.countryCode }}</p>
+                    </ion-label>
+                  </ion-item>
+                </ion-list>
               </div>
             </div>
           </div>
+          <div class="form-row">
+            <div class="form-group date">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <div class="input-wrapper">
+                <label>Abflugdatum</label>
+                <ion-input
+                  type="date"
+                  [(ngModel)]="departureDate"
+                  [value]="departureDate"
+                  (ionChange)="onDateChange($event, 'departure')"
+                ></ion-input>
+              </div>
+            </div>
+            <div class="form-group date">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <div class="input-wrapper">
+                <label>Rückflugdatum</label>
+                <ion-input
+                  type="date"
+                  [(ngModel)]="returnDate"
+                  [value]="returnDate"
+                  (ionChange)="onDateChange($event, 'return')"
+                ></ion-input>
+              </div>
+            </div>
+            <div class="form-group passengers">
+              <ion-icon name="people-outline"></ion-icon>
+              <div class="input-wrapper">
+                <label>Passagiere</label>
+                <div class="passenger-control">
+                  <ion-button fill="clear" (click)="decreasePassengers()" [disabled]="passengers <= 1">
+                    <ion-icon name="remove-outline"></ion-icon>
+                  </ion-button>
+                  <span class="passenger-count">{{ passengers }}</span>
+                  <ion-button fill="clear" (click)="increasePassengers()" [disabled]="passengers >= 9">
+                    <ion-icon name="add-outline"></ion-icon>
+                  </ion-button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="search-actions">
+            <ion-button class="search-button" (click)="navigateToFlightSearch()">
+              <ion-icon name="search-outline" slot="start"></ion-icon>
+              Flug suchen
+            </ion-button>
+          </div>
+          <div class="error-message" *ngIf="errorMessage">
+            {{ errorMessage }}
+          </div>
         </div>
-
-        <div class="search-actions">
-          <ion-button class="clear-button" (click)="clearSearch()">
-            <ion-icon name="refresh-outline" slot="start"></ion-icon>
-            Zurücksetzen
-          </ion-button>
-          <ion-button class="search-button" (click)="navigateToFlightSearch()">
-            <ion-icon name="search-outline" slot="start"></ion-icon>
-            Flug suchen
-          </ion-button>
-        </div>
-      </div>
-    </div>
+      </ion-card-content>
+    </ion-card>
 
     <div class="flight-list" *ngIf="flights.length > 0">
       <div class="flight-item" *ngFor="let flight of flights">
@@ -178,10 +174,6 @@
 
     <div class="loading-spinner" *ngIf="loading">
       <ion-spinner name="crescent"></ion-spinner>
-    </div>
-
-    <div class="error-message" *ngIf="errorMessage">
-      {{ errorMessage }}
     </div>
   </div>
 </ion-content>
