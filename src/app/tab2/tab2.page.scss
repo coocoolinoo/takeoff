@@ -1,18 +1,18 @@
 /* Base Styles */
 .content-bg {
   min-height: 100vh;
-  background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);
+  background: #e0e7ff;
   position: relative;
 }
 
 .background-visual {
   position: absolute;
-  top: 0; left: 0; right: 0; height: 220px;
+  top: 0; left: 0; right: 0; height: 180px;
   background: linear-gradient(120deg, #6366f1 0%, #a5b4fc 100%);
-  border-bottom-left-radius: 48px;
-  border-bottom-right-radius: 48px;
+  border-bottom-left-radius: 36px;
+  border-bottom-right-radius: 36px;
   z-index: 1;
-  filter: blur(0.5px) brightness(0.95);
+  filter: blur(0.5px) brightness(0.97);
 }
 
 /* Header Styles */
@@ -376,5 +376,63 @@
   }
   .welcome-title-modern {
     font-size: 1.3rem;
+  }
+}
+
+/* Darkmode Styles */
+@media (prefers-color-scheme: dark) {
+  .content-bg {
+    background: #1a1b26;
+  }
+  
+  .background-visual {
+    background: linear-gradient(120deg, #3730a3 0%, #6366f1 100%);
+  }
+
+  .header-toolbar.glass-blur {
+    background: rgba(30, 32, 40, 0.85) !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+    border-bottom: 1px solid rgba(99,102,241,0.18);
+  }
+
+  .header-title {
+    color: #a5b4fc;
+    .header-icon {
+      color: #a5b4fc;
+    }
+  }
+
+  .glass-card {
+    background: rgba(30, 32, 40, 0.85) !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45) !important;
+    border: 1px solid rgba(99,102,241,0.18) !important;
+  }
+
+  .card-header-modern {
+    .card-title-modern {
+      color: #a5b4fc;
+    }
+    .card-subtitle-modern {
+      color: #818cf8;
+    }
+  }
+
+  .passenger-form-modern {
+    background: rgba(30, 32, 40, 0.8) !important;
+    .passenger-header-modern h3 {
+      color: #a5b4fc;
+    }
+    .form-item-modern {
+      background: rgba(30, 32, 40, 0.9) !important;
+      .input-icon-modern {
+        color: #a5b4fc;
+      }
+      ion-label {
+        color: #a5b4fc;
+      }
+      ion-input, ion-select {
+        color: #f3f4f6;
+      }
+    }
   }
 }

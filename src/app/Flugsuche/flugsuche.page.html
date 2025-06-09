@@ -24,21 +24,12 @@
               <ion-icon name="airplane-outline"></ion-icon>
               <div class="input-wrapper">
                 <label>Von</label>
-                <ion-input
-                  [(ngModel)]="departureQuery"
-                  (ionInput)="searchDepartureAirports(departureQuery || '')"
-                  (ionBlur)="clearDepartureAirportsDelayed()"
-                  placeholder="z.B. Wien"
-                  autocomplete="off"
-                ></ion-input>
-                <ion-list *ngIf="departureAirports.length > 0" class="autocomplete-list absolute-dropdown">
-                  <ion-item *ngFor="let airport of departureAirports" (mousedown)="$event.preventDefault(); selectDepartureAirport(airport)">
-                    <ion-label>
-                      <h3>{{ airport.name }}</h3>
-                      <p>{{ airport.iata }} - {{ airport.countryCode }}</p>
-                    </ion-label>
-                  </ion-item>
-                </ion-list>
+                <ion-item lines="none">
+                  <ion-label>
+                    <h2>{{ selectedDeparture?.name }}</h2>
+                    <p>{{ selectedDeparture?.iata }} - {{ selectedDeparture?.countryCode }}</p>
+                  </ion-label>
+                </ion-item>
               </div>
             </div>
             <button class="swap-button" (click)="swapAirports()">
@@ -48,21 +39,12 @@
               <ion-icon name="airplane-outline"></ion-icon>
               <div class="input-wrapper">
                 <label>Nach</label>
-                <ion-input
-                  [(ngModel)]="arrivalQuery"
-                  (ionInput)="searchArrivalAirports(arrivalQuery || '')"
-                  (ionBlur)="clearArrivalAirportsDelayed()"
-                  placeholder="z.B. Rom"
-                  autocomplete="off"
-                ></ion-input>
-                <ion-list *ngIf="arrivalAirports.length > 0" class="autocomplete-list absolute-dropdown">
-                  <ion-item *ngFor="let airport of arrivalAirports" (mousedown)="$event.preventDefault(); selectArrivalAirport(airport)">
-                    <ion-label>
-                      <h3>{{ airport.name }}</h3>
-                      <p>{{ airport.iata }} - {{ airport.countryCode }}</p>
-                    </ion-label>
-                  </ion-item>
-                </ion-list>
+                <ion-item lines="none">
+                  <ion-label>
+                    <h2>{{ selectedArrival?.name }}</h2>
+                    <p>{{ selectedArrival?.iata }} - {{ selectedArrival?.countryCode }}</p>
+                  </ion-label>
+                </ion-item>
               </div>
             </div>
           </div>
@@ -81,7 +63,7 @@
                 <p>🛬 {{ returnDate }}</p>
               </ion-label>
             </ion-item>
-            <ion-item lines="none">
+            <ion-item lines="none" (click)="navigateToPassengers()">
               <ion-icon name="people-outline" slot="start"></ion-icon>
               <ion-label>
                 <h3>Passagiere</h3>

@@ -50,7 +50,6 @@ export class Tab2Page {
 
   isRegistered = false;
   showError = false;
-  confetti = Array(50).fill(0);
   randomTicket = Math.floor(Math.random() * 900000);
   countries: { name: string; code: string }[] = [];
 

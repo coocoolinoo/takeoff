@@ -31,7 +31,7 @@
 }
 
 ion-content {
-  --background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);
+  --background: #e0e7ff;
 }
 
 .passengers-card {
@@ -1381,6 +1381,35 @@ ion-spinner {
   ion-icon {
     color: white;
     font-size: 0.8rem;
+  }
+}
+
+/* Darkmode Styles */
+@media (prefers-color-scheme: dark) {
+  ion-content {
+    --background: #1a1b26;
+  }
+  
+  .background-container {
+    background: linear-gradient(120deg, #3730a3 0%, #6366f1 100%);
+  }
+
+  ion-card.info-card, ion-card.flights-card, .requirements-card, .country-info-content, .passenger-list, ion-accordion-group {
+    background: rgba(30, 32, 40, 0.85) !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45) !important;
+    border: 1px solid rgba(99,102,241,0.18) !important;
+  }
+
+  ion-card-header, .accordion-header {
+    color: #a5b4fc !important;
+  }
+
+  ion-card-title {
+    color: #a5b4fc;
+  }
+
+  ion-item, .passenger-item {
+    --background: rgba(30, 32, 40, 0.8) !important;
   }
 }
 

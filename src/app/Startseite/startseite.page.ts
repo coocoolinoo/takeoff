@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FooterPage } from '../footer/footer.page';
 import { PassengerService, Passenger } from '../passenger.service';
+import { AirportService } from '../airport.service';
 
 interface Airport {
   name: string;
@@ -40,7 +41,8 @@ export class StartseitePage implements OnInit {
     private aerodataboxService: AerodataboxService,
     private navCtrl: NavController,
     private router: Router,
-    private passengerService: PassengerService
+    private passengerService: PassengerService,
+    private airportService: AirportService
   ) {}
 
   ngOnInit() {
@@ -96,12 +98,14 @@ export class StartseitePage implements OnInit {
     this.selectedDeparture = airport;
     this.departureQuery = airport.name;
     this.departureAirports = [];
+    this.airportService.setAirports(airport.iata, this.selectedArrival?.iata || '');
   }
 
   selectArrivalAirport(airport: Airport): void {
     this.selectedArrival = airport;
     this.arrivalQuery = airport.name;
     this.arrivalAirports = [];
+    this.airportService.setAirports(this.selectedDeparture?.iata || '', airport.iata);
   }
 
   clearDeparture(): void {

@@ -10,9 +10,10 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <div class="background-visual"></div>
   <div class="content-container">
     <div class="welcome-section">
-      <h1>Willkommen bei TakeOff</h1>
+      <h1>Willkommen bei <span class="title-gradient">TakeOff</span></h1>
       <p class="subtitle">Ihre Reise beginnt hier</p>
     </div>
 
@@ -101,15 +102,7 @@
               <ion-icon name="people-outline"></ion-icon>
               <div class="input-wrapper">
                 <label>Passagiere</label>
-                <div class="passenger-control">
-                  <ion-button fill="clear" (click)="decreasePassengers()" [disabled]="passengers <= 1">
-                    <ion-icon name="remove-outline"></ion-icon>
-                  </ion-button>
-                  <span class="passenger-count">{{ passengers }}</span>
-                  <ion-button fill="clear" (click)="increasePassengers()" [disabled]="passengers >= 9">
-                    <ion-icon name="add-outline"></ion-icon>
-                  </ion-button>
-                </div>
+                <span class="passenger-count">{{ passengers }}</span>
               </div>
             </div>
           </div>

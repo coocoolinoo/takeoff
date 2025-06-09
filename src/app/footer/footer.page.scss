@@ -12,15 +12,69 @@ ion-tab-bar {
   bottom: 0;
   left: 0;
   width: 100%;
-  --background: #ffffff;
-  --color: #666666;
-  --color-selected: #3880ff;
-  height: 60px;
-  border-top: 1px solid #f0f0f0;
+  --background: rgba(255,255,255,0.7); /* Glass-Blur Hintergrund */
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 24px rgba(99,102,241,0.08);
+  border-top: 1px solid rgba(99,102,241,0.08);
+  --color: #3730a3; /* Standardfarbe für unselektierte Tabs */
+  --color-selected: #6366f1; /* Primärfarbe für selektierte Tabs */
+  height: 70px; /* Leicht erhöhte Höhe für modernes Aussehen */
+  padding-bottom: env(safe-area-inset-bottom); /* Anpassung für Safe-Area auf iOS */
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 ion-tab-button {
   max-width: 200px;
+  flex-direction: column; /* Icon und Label übereinander */
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s ease;
+
+  ion-icon {
+    font-size: 1.5rem;
+    margin-bottom: 4px;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  ion-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: color 0.2s ease;
+  }
+
+  &.tab-selected {
+    transform: translateY(-2px); /* Leichter Hoch-Effekt beim Auswählen */
+    ion-icon {
+      color: var(--ion-color-selected);
+      transform: scale(1.1); /* Icon wird beim Auswählen größer */
+    }
+    ion-label {
+      background: linear-gradient(90deg, #6366f1 0%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+  }
+}
+
+/* Darkmode Styles for Footer */
+@media (prefers-color-scheme: dark) {
+  ion-tab-bar {
+    --background: rgba(30, 32, 40, 0.85); /* Dunklerer Hintergrund im Darkmode */
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+    border-top: 1px solid rgba(99,102,241,0.18);
+    --color: #f3f4f6; /* Helle Textfarbe im Darkmode */
+    --color-selected: #a5b4fc; /* Helleres Blau für selektierte Tabs im Darkmode */
+  }
+
+  ion-tab-button.tab-selected {
+    ion-label {
+      background: linear-gradient(90deg, #6366f1 0%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+  }
 }
 
 ion-content {

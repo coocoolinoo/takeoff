@@ -7,6 +7,7 @@ import { AerodataboxService } from '../aerodatabox.service';
 import { lastValueFrom } from 'rxjs';
 import { CountryinfoService } from "../countryinfo.service";
 import { PassengerService, Passenger } from '../passenger.service';
+import { AirportService } from '../airport.service';
 
 interface Airport {
   name: string;
@@ -45,7 +46,8 @@ export class FlugsuchePage implements OnInit {
     private router: Router,
     private aeroService: AerodataboxService,
     private countryInfoService: CountryinfoService,
-    private passengerService: PassengerService
+    private passengerService: PassengerService,
+    private airportService: AirportService
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
@@ -57,6 +59,30 @@ export class FlugsuchePage implements OnInit {
       this.loadPassengers();
       this.loadFlights();
       this.loadCountryInfo();
+    } else {
+      // Wenn keine Navigation State vorhanden ist, versuche die Flughäfen aus dem Service zu laden
+      const departureIata = this.airportService.getDepartureAirport();
+      const arrivalIata = this.airportService.getArrivalAirport();
+      
+      if (departureIata && arrivalIata) {
+        this.aeroService.searchAirports(departureIata).subscribe({
+          next: (airports) => {
+            if (airports.items && airports.items.length > 0) {
+              this.selectedDeparture = airports.items[0];
+              this.departureQuery = airports.items[0].name;
+            }
+          }
+        });
+        
+        this.aeroService.searchAirports(arrivalIata).subscribe({
+          next: (airports) => {
+            if (airports.items && airports.items.length > 0) {
+              this.selectedArrival = airports.items[0];
+              this.arrivalQuery = airports.items[0].name;
+            }
+          }
+        });
+      }
     }
   }
 
@@ -223,6 +249,10 @@ export class FlugsuchePage implements OnInit {
     setTimeout(() => {
       this.arrivalAirports = [];
     }, 200);
+  }
+
+  navigateToPassengers() {
+    this.router.navigate(['/footer/profile']);
   }
 
   swapAirports(): void {
